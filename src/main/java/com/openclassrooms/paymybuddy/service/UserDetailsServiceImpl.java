@@ -17,7 +17,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Custom UserDetailsService for Spring Security authentication.
+ * Custom UserDetailsService implementation for Spring Security authentication.
  * 
  * <p>
  * Implements UserDetailsService interface that is used to retrieve user-related data.
@@ -29,7 +29,8 @@ import java.util.Set;
  */
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService{
-    @Autowired
+    
+	@Autowired
     private UserRepository userRepository;
 
     @Override

@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8">
-<title>Log in with your account</title>
+<title>Connections</title>
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
 	integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
@@ -11,31 +11,45 @@
 </head>
 
 <body>
+ 
 	<div class="container">
-		<form class="form-signin" method="POST" th:action="@{/login}">
+<!--	
+		<form method="POST" class="mt-4" th:action="@{/connectionAdd} >
 
-			<div th:if="${param.error}">
-				<div class="alert alert-danger">Invalid username or password.</div>
-			</div>
-			<div th:if="${param.logout}">
-				<div class="alert alert-info">You have been logged out.</div>
-			</div>
-
-			<h2 class="form-heading">Log in</h2>
+			<h2 class="form-signin-heading">Add a new contact:</h2>
 
 			<div class="form-group">
-				<span th:text="${message}"></span>
-				<input name="username" type="text" class="form-control" placeholder="Enter Email" autofocus="true" />
-				<input name="password" type="password" class="form-control" placeholder="Password" />
+				<input name="email" type="text" class="form-control" placeholder="Email to add as connection" autofocus="true">
 				<span class="has-error" th:text="${error}"></span>
-				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-
-				<button class="btn btn-lg btn-primary btn-block" type="submit">Log In</button>
-				<h4 class="text-center">
-					<a href="/registration">Create an account</a>
-				</h4>
 			</div>
+
+			<button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
 		</form>
+	</div>
+-->
+	<div class="container">
+		<h2 class="mt-4">Contacts</h2>
+		<table class="table">
+			<thead class="thead-light">
+				<tr>
+					<th class="text-left">Email</th>
+					<th class="text-left">First Name</th>
+					<th class="text-left">Last Name</th>
+					<th class="text-left"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="connection : ${user.connections}">
+					<td th:text="${connection.email}"></td>
+					<td th:text="${connection.firstname}"></td>
+					<td th:text="${connection.lastname}"></td>
+					<td><a href="#" class="btn btn-info" role="button"
+						th:href="@{/connectionDelete(id=${connection.id})}">Delete</a></td>
+				</tr>
+			</tbody>
+		</table>
+		<hr />
+
 	</div>
 
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"

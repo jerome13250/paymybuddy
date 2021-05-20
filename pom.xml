@@ -9,7 +9,7 @@
 		<version>2.4.5</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.openclassrooms.paymybuddy</groupId>
+	<groupId>com.openclassrooms.paymybuddy.paymybuddy</groupId>
 	<artifactId>paymybuddy</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>PayMyBuddy</name>
@@ -33,6 +33,10 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.thymeleaf.extras</groupId>
