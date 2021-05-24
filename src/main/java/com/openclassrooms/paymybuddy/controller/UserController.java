@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.openclassrooms.paymybuddy.model.Role;
 import com.openclassrooms.paymybuddy.model.User;
@@ -40,54 +41,78 @@ public class UserController {
 
 	@GetMapping("/")
 	public String viewHomePage() {
-		logger.info("Inside @GetMapping(\"/\")");
+		logger.info("GET: /");
 		return "index";
 	}
     
 	@GetMapping("/login")
 	public String viewLoginPage() {
-		logger.info("Inside @GetMapping(\"/login\")");
+		logger.info("GET: /login");
 		return "login";
 	}
 	
     @GetMapping("/registration")
-    public String registration(Model model) { //
+    public String registration(Model model) { 
+    	logger.info("GET: /registration");
         model.addAttribute("userForm", new User());
         return "registration";
     }
     
     @PostMapping("/registration")
-    public String registration(@Valid @ModelAttribute("userForm") User userForm, BindingResult bindingResult) {
-        
+    public String registration(@Valid @ModelAttribute("userForm") User userForm, BindingResult bindingResult, Model model) {
+    	logger.info("POST: /registration");
         if (bindingResult.hasErrors()) {
             return "registration";
         }
-        if ( emailExistInDatabase(userForm.getEmail()) ) {
+        
+        if ( userService.existsByEmail(userForm.getEmail()) ) {
         	bindingResult.rejectValue("email", "", "This email already exists");
             return "registration";
         }
         
+        //need to save password for autologin, because userForm password will be encoded by userService
+        String password = userForm.getPassword(); 
         userService.create(userForm);
-        //Note that we need to use the user passwordconfirm, password attribute is modified to crypted version in save()
-        securityService.autoLogin(userForm.getEmail(), userForm.getPasswordconfirm());
+       
+        securityService.autoLogin(userForm.getEmail(), password);
 
         return "redirect:/";
-    }
-	
-    private boolean emailExistInDatabase(String email){
-    	return userService.findByEmail(email)!=null;
     }
     
     @GetMapping("/connection")
     public String connection(Model model) {
     	logger.info("Calling: GET /connection");
     	model.addAttribute("user", userService.findByEmail(securityService.getCurrentUserDetailsUserName()));
-        return "connection";
+    	return "connection";
     }
     
-    @GetMapping("/connectionDelete")
+    @PostMapping("/connection")
+    public String connectionAdd(@RequestParam String email , Model model) { 
+    	logger.info("Calling: POST /connection");
+    	User user = userService.findByEmail(securityService.getCurrentUserDetailsUserName());
+    	model.addAttribute("user", user);
+    	
+    	if ( !userService.existsByEmail(email) ) {
+    		model.addAttribute("error", "Email Unknown");
+            return "connection";
+        }
+    	
+    	if ( user.getEmail().equalsIgnoreCase(email) ) {
+    		model.addAttribute("error", "You can't add yourself as a connection");
+            return "connection";
+        }
+    	
+        User newConnection = userService.findByEmail(email);
+    	user.getConnections().add(newConnection);
+    	userService.update(user);
+
+    	return "connection";
+    }
+    
+    
+    @PostMapping("/connectionDelete")
     public String connectionDelete(@RequestParam Long id) { 
-    	logger.info("Calling: GET /connectionDelete");
+    	logger.info("Calling: POST /connectionDelete");
     	User user = userService.findByEmail(securityService.getCurrentUserDetailsUserName());
     	user.getConnections().removeIf(connectionUser -> (connectionUser.getId()==id) );
     	userService.update(user);
@@ -95,32 +120,8 @@ public class UserController {
         return "redirect:/connection";
     }
     
-    @GetMapping("/connectionAdd")
-    public String connectionAdd(@RequestParam String email /*, BindingResult bindingResult*/) { 
-    	logger.info("Calling: GET /connectionAdd");
-
-    	/*
-    	if ( !emailExistInDatabase(email) ) {
-        	bindingResult.rejectValue("email", "", "This email is unknown");
-            return "connection";
-        }
-    	*/
-    	User user = userService.findByEmail(securityService.getCurrentUserDetailsUserName());
-/*
-    	if ( user.getEmail().equalsIgnoreCase(email) ) {
-        	bindingResult.rejectValue("email", "", "You can't add yourself as a connection");
-            return "connection";
-        }
-*/    	
-        User newConnection = userService.findByEmail(email);
-    	user.getConnections().add(newConnection);
-    	userService.update(user);
-        
-        return "connection";
-    }
-    
-    
     @GetMapping("/principal")
+    @ResponseBody
     public Principal retrievePrincipal(Principal principal) {
         return principal;
     }

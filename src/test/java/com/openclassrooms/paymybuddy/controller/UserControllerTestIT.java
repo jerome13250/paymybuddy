@@ -50,7 +50,7 @@ class UserControllerTestIT {
 
 	@Test
 	void userLoginTest() throws Exception {
-		mvc.perform(formLogin("/login").user("testuser@mail.com").password("123")).andExpect(authenticated());
+		mvc.perform(formLogin("/login").user("bradpitt@mail.com").password("123")).andExpect(authenticated());
 	}
 
 	@Test

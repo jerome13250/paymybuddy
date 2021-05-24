@@ -1,5 +1,6 @@
 package com.openclassrooms.paymybuddy.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -19,17 +20,21 @@ import javax.validation.constraints.NotBlank;
 
 import com.openclassrooms.paymybuddy.validation.PasswordEquality;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @ToString
 @Entity
 @Table(name = "user")
 @PasswordEquality
-public class User {
+public class User{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,7 +55,7 @@ public class User {
 	private Boolean enabled;
 	@NotBlank
 	private String bankaccountnumber;
-	private Double amount;
+	private BigDecimal amount;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "currency_id")

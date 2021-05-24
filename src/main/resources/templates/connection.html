@@ -11,22 +11,18 @@
 </head>
 
 <body>
- 
+
 	<div class="container">
-<!--	
-		<form method="POST" class="mt-4" th:action="@{/connectionAdd} >
-
+		<form method="POST" class="mt-4" th:action="@{/connection}" >
 			<h2 class="form-signin-heading">Add a new contact:</h2>
-
 			<div class="form-group">
 				<input name="email" type="text" class="form-control" placeholder="Email to add as connection" autofocus="true">
 				<span class="has-error" th:text="${error}"></span>
 			</div>
-
 			<button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
 		</form>
 	</div>
--->
+
 	<div class="container">
 		<h2 class="mt-4">Contacts</h2>
 		<table class="table">
@@ -43,8 +39,15 @@
 					<td th:text="${connection.email}"></td>
 					<td th:text="${connection.firstname}"></td>
 					<td th:text="${connection.lastname}"></td>
+					<td> 
+						<form method="POST" th:action="@{/connectionDelete}" >
+						<button class="btn btn-info" type="submit" name="id" th:value="${connection.id}">Delete</button>
+						</form>
+					</td>
+					<!-- 
 					<td><a href="#" class="btn btn-info" role="button"
 						th:href="@{/connectionDelete(id=${connection.id})}">Delete</a></td>
+					-->
 				</tr>
 			</tbody>
 		</table>

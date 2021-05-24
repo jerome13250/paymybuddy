@@ -25,6 +25,7 @@ public class SecurityServiceImpl implements SecurityService{
 
     public boolean isAuthenticated() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        //TODO: Investiguer AnonymousAuthenticationToken
         if (authentication == null || AnonymousAuthenticationToken.class.
             isAssignableFrom(authentication.getClass())) {
             return false;
