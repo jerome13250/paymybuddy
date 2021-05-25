@@ -40,7 +40,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login?logout")
             .permitAll()
          .and()
-         .rememberMe().key("uniqueAndSecret").tokenValiditySeconds(86400) //1day rememberMe
+         .rememberMe().key("lkl,P3/*8[]*&^.k1654326").tokenValiditySeconds(86400) //1day rememberMe
          ;
     }
 
