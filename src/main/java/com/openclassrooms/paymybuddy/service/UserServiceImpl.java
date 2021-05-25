@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.openclassrooms.paymybuddy.model.Currency;
 import com.openclassrooms.paymybuddy.model.Role;
 import com.openclassrooms.paymybuddy.model.User;
+import com.openclassrooms.paymybuddy.repositories.CurrencyRepository;
 import com.openclassrooms.paymybuddy.repositories.RoleRepository;
 import com.openclassrooms.paymybuddy.repositories.UserRepository;
 import com.openclassrooms.paymybuddy.validation.PasswordEquality;
@@ -26,6 +27,8 @@ public class UserServiceImpl implements UserService {
 	private UserRepository userRepository;
 	@Autowired
 	private RoleRepository roleRepository;
+	@Autowired
+	private CurrencyRepository currencyRepository;
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -46,10 +49,6 @@ public class UserServiceImpl implements UserService {
 		hashSetRoleUserOnly.add(roleRepository.findByRolename("USER"));
 		user.setRoles(hashSetRoleUserOnly); 
 		
-		//TODO: fix this
-		Currency cur = new Currency();
-		cur.setId(1L);
-		user.setCurrency(cur);
 		userRepository.save(user);
 	}
 	

@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.openclassrooms.paymybuddy.model.Role;
 import com.openclassrooms.paymybuddy.model.User;
+import com.openclassrooms.paymybuddy.service.CurrencyService;
 import com.openclassrooms.paymybuddy.service.SecurityService;
 import com.openclassrooms.paymybuddy.service.UserService;
 
@@ -38,6 +39,9 @@ public class UserController {
 	@Autowired
     private UserService userService;
 
+	@Autowired
+    private CurrencyService currencyService;
+	
     @Autowired
     private SecurityService securityService;
 
@@ -53,33 +57,7 @@ public class UserController {
 		return "login";
 	}
 	
-    @GetMapping("/registration")
-    public String registration(Model model) { 
-    	logger.info("GET: /registration");
-        model.addAttribute("userForm", new User());
-        return "registration";
-    }
-    
-    @PostMapping("/registration")
-    public String registration(@Valid @ModelAttribute("userForm") User userForm, BindingResult bindingResult, Model model) {
-    	logger.info("POST: /registration");
-        if (bindingResult.hasErrors()) {
-            return "registration";
-        }
-        
-        if ( userService.existsByEmail(userForm.getEmail()) ) {
-        	bindingResult.rejectValue("email", "", "This email already exists");
-            return "registration";
-        }
-        
-        //need to save password for autologin, because userForm password will be encoded by userService
-        String password = userForm.getPassword(); 
-        userService.create(userForm);
-       
-        securityService.autoLogin(userForm.getEmail(), password);
 
-        return "redirect:/";
-    }
     
     @GetMapping("/connection")
     public String connection(Model model) {
