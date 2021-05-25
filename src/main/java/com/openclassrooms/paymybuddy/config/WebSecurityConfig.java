@@ -33,6 +33,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     	.antMatchers("/registration**", "/js/**","/css/**", "/img/**","/principal").permitAll()
     	.anyRequest().authenticated()
     	.and()
+    	//.oauth2Login().loginPage("/oauth_login").permitAll()
     	.formLogin().loginPage("/login").permitAll()
     	.and()
     	.logout().invalidateHttpSession(true).clearAuthentication(true)
