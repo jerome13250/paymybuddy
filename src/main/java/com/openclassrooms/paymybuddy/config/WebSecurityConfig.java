@@ -38,7 +38,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     	.and()
     	.logout().invalidateHttpSession(true).clearAuthentication(true)
             .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login?logout")
-            .permitAll();
+            .permitAll()
+         .and()
+         .rememberMe().key("lkl,P3/*8[]*&^.k1654326").tokenValiditySeconds(86400) //1day rememberMe
+         ;
     }
 
     @Bean
