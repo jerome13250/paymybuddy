@@ -1,8 +1,11 @@
 package com.openclassrooms.paymybuddy.controller;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
@@ -23,6 +26,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.openclassrooms.paymybuddy.model.Currency;
 import com.openclassrooms.paymybuddy.model.User;
+import com.openclassrooms.paymybuddy.service.BankTransactionService;
 import com.openclassrooms.paymybuddy.service.CurrencyService;
 import com.openclassrooms.paymybuddy.service.UserService;
 import com.openclassrooms.paymybuddy.testconfig.SpringSecurityWebTestConfig;
@@ -46,6 +50,8 @@ class BankTransactionControllerTest {
 	private UserService userServiceMock;
 	@MockBean
 	private CurrencyService currencyServiceMock;
+	@MockBean
+	private BankTransactionService bankTransactionService;
 
 	
 	@WithUserDetails("user@company.com") //user from SpringSecurityWebTestConfig.class
@@ -63,6 +69,28 @@ class BankTransactionControllerTest {
 		mockMvc.perform(get("/banktransaction"))
 		.andExpect(status().is2xxSuccessful())
 		.andExpect(view().name("banktransaction"))
+		.andExpect(model().size(2))
+		.andExpect(model().attributeExists("user"))
+		.andExpect(model().attributeExists("currencies"))
+		;
+	}
+	
+	@WithUserDetails("user@company.com") //user from SpringSecurityWebTestConfig.class
+	@Test
+	void PostBankTransaction_shouldSucceedAndRedirected() throws Exception {
+		User user = new User(1L, "john", "doe", "johndoe@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),
+				"password1", "", true, "1AX256", new BigDecimal(200), new Currency(), new HashSet<>(), new HashSet<>(), new HashSet<>() );
+		when(userServiceMock.getConnectedUser()).thenReturn(user);
+		Currency currency1 = new Currency(1L,"Euro","EUR","€");
+		List<Currency> currencies = Arrays.asList(currency1);
+		when(currencyServiceMock.findAll()).thenReturn(currencies);
+		
+		mockMvc.perform(post("/banktransactionGetmoney")
+				.param("amount", "1500")
+				.param("currency", "3")
+				.with(csrf()))
+		.andExpect(status().is3xxRedirection())
+		.andExpect(redirectedUrl("/banktransaction"))
 		.andExpect(model().size(2))
 		.andExpect(model().attributeExists("user"))
 		.andExpect(model().attributeExists("currencies"))

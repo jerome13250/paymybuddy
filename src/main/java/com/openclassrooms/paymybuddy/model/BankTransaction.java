@@ -33,7 +33,6 @@ public class BankTransaction {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 	
-	@NotBlank
 	private String bankaccountnumber;
 	
 	private LocalDateTime datetime;

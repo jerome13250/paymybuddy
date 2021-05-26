@@ -12,12 +12,12 @@
 
 <body>
 	<div class="container">
-		<form method="POST" class="mt-4" th:action="@{/banktransactionGet}" >
+		<form method="POST" class="mt-4" th:action="@{/banktransactionGetmoney}" >
 			<h2 class="form-signin-heading">Get Money from your bank:</h2>
 			
 			<div class="form-row">
 				<div class="col">
-					<input name="moneyGet" type="number" class="form-control" placeholder="Enter money amount" autofocus="true">
+					<input name="amount" type="number" class="form-control" placeholder="Enter money amount" autofocus="true">
 					<span class="has-error" th:text="${error}"></span>
 				</div>
 				<div class="col">
@@ -48,10 +48,10 @@
 			</thead>
 			<tbody>
 				<tr th:each="transaction : ${user.banktransactions}">
-					<td th:text="${transaction.bankAccountNumber}"></td>
-					<td th:text="${transaction.dateTime}"></td>
-					<td th:text="${connection.amount}"></td>
-					<td th:text="${connection.currency}"></td>
+					<td th:text="${transaction.bankaccountnumber}"></td>
+					<td th:text="${transaction.datetime}"></td>
+					<td th:text="${transaction.amount}"></td>
+					<td th:text="${transaction.currency}"></td>
 				</tr>
 			</tbody>
 		</table>
