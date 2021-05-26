@@ -62,14 +62,14 @@ public class UserController {
     @GetMapping("/connection")
     public String connection(Model model) {
     	logger.info("Calling: GET /connection");
-    	model.addAttribute("user", userService.findByEmail(securityService.getCurrentUserDetailsUserName()));
+    	model.addAttribute("user", userService.getConnectedUser());
     	return "connection";
     }
     
     @PostMapping("/connection")
     public String connectionAdd(@RequestParam String email , Model model) { 
     	logger.info("Calling: POST /connection");
-    	User user = userService.findByEmail(securityService.getCurrentUserDetailsUserName());
+    	User user = userService.getConnectedUser();
     	model.addAttribute("user", user);
     	
     	if ( !userService.existsByEmail(email) ) {
@@ -93,7 +93,7 @@ public class UserController {
     @PostMapping("/connectionDelete")
     public String connectionDelete(@RequestParam Long id) { 
     	logger.info("Calling: POST /connectionDelete");
-    	User user = userService.findByEmail(securityService.getCurrentUserDetailsUserName());
+    	User user = userService.getConnectedUser();
     	user.getConnections().removeIf(connectionUser -> (connectionUser.getId()==id) );
     	userService.update(user);
         

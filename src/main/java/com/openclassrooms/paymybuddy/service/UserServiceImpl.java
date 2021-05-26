@@ -28,6 +28,8 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private RoleRepository roleRepository;
 	@Autowired
+	private SecurityService securityService;
+	@Autowired
 	private CurrencyRepository currencyRepository;
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -66,6 +68,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Boolean existsByEmail(String email) {
 		return userRepository.existsByEmail(email);
+	}
+
+	@Override
+	public User getConnectedUser() {
+		return findByEmail(securityService.getCurrentUserDetailsUserName());
 	}
 
 }

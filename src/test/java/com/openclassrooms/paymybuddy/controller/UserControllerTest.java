@@ -46,10 +46,8 @@ class UserControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
-
 	@MockBean
 	private UserService userServiceMock;
-
 	@MockBean
 	private SecurityService securityServiceMock;
 
@@ -160,9 +158,9 @@ class UserControllerTest {
 	void PostConnectionPage_shouldSucceed() throws Exception {
 		//
 		User user = new User(1L, "john", "doe", "johndoe@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),
-				"password1", "", true, "1AX256", new BigDecimal(200), new Currency(), new HashSet<>(), new HashSet<>() );
+				"password1", "", true, "1AX256", new BigDecimal(200), new Currency(), new HashSet<>(), new HashSet<>(), new HashSet<>() );
 		User newConnection = new User(2L, "michael", "stone", "michaelstone@mail.com", LocalDateTime.of(2030, 01, 25, 00, 45),
-				"password2", "", true, "12HGJ44", new BigDecimal(500), new Currency(), new HashSet<>(), new HashSet<>() );		
+				"password2", "", true, "12HGJ44", new BigDecimal(500), new Currency(), new HashSet<>(), new HashSet<>(), new HashSet<>() );		
 		
 		when(securityServiceMock.getCurrentUserDetailsUserName()).thenReturn("johndoe@mail.com");
 		when(userServiceMock.findByEmail("johndoe@mail.com")).thenReturn(user);
@@ -186,9 +184,9 @@ class UserControllerTest {
 	void PostConnectionPage_shouldFail_connectionUnknown() throws Exception {
 		//
 		User user = new User(1L, "john", "doe", "johndoe@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),
-				"password1", "", true, "1AX256", new BigDecimal(200), new Currency(), new HashSet<>(), new HashSet<>() );
+				"password1", "", true, "1AX256", new BigDecimal(200), new Currency(), new HashSet<>(), new HashSet<>(), new HashSet<>() );
 		User newConnection = new User(2L, "michael", "stone", "michaelstone@mail.com", LocalDateTime.of(2030, 01, 25, 00, 45),
-				"password2", "", true, "12HGJ44", new BigDecimal(500), new Currency(), new HashSet<>(), new HashSet<>() );		
+				"password2", "", true, "12HGJ44", new BigDecimal(500), new Currency(), new HashSet<>(), new HashSet<>(), new HashSet<>() );		
 		
 		when(securityServiceMock.getCurrentUserDetailsUserName()).thenReturn("johndoe@mail.com");
 		when(userServiceMock.findByEmail("johndoe@mail.com")).thenReturn(user);
@@ -215,7 +213,7 @@ class UserControllerTest {
 	void PostConnectionPage_shouldFail_connectionToHimself() throws Exception {
 		//
 		User user = new User(1L, "john", "doe", "johndoe@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),
-				"password1", "", true, "1AX256", new BigDecimal(200), new Currency(), new HashSet<>(), new HashSet<>() );
+				"password1", "", true, "1AX256", new BigDecimal(200), new Currency(), new HashSet<>(), new HashSet<>(), new HashSet<>() );
 		
 		when(securityServiceMock.getCurrentUserDetailsUserName()).thenReturn("johndoe@mail.com");
 		when(userServiceMock.findByEmail("johndoe@mail.com")).thenReturn(user);
@@ -241,11 +239,11 @@ class UserControllerTest {
 	void PostConnectionDeletePage_shouldSucceed() throws Exception {
 		//
 		User user = new User(1L, "john", "doe", "johndoe@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),
-				"password1", "", true, "1AX256", new BigDecimal(200), new Currency(), new HashSet<>(), new HashSet<>() );
+				"password1", "", true, "1AX256", new BigDecimal(200), new Currency(), new HashSet<>(), new HashSet<>(), new HashSet<>() );
 		User connection1 = new User(2L, "michael", "stone", "michaelstone@mail.com", LocalDateTime.of(2030, 01, 25, 00, 45),
-				"password2", "", true, "12HGJ44", new BigDecimal(500), new Currency(), new HashSet<>(), new HashSet<>() );	
+				"password2", "", true, "12HGJ44", new BigDecimal(500), new Currency(), new HashSet<>(), new HashSet<>(), new HashSet<>() );	
 		User connection2 = new User(3L, "jason", "hill", "jasonhill@mail.com", LocalDateTime.of(2034, 01, 25, 00, 45),
-				"password3", "", true, "12HGJ88", new BigDecimal(800), new Currency(), new HashSet<>(), new HashSet<>() );	
+				"password3", "", true, "12HGJ88", new BigDecimal(800), new Currency(), new HashSet<>(), new HashSet<>(), new HashSet<>() );	
 		user.getConnections().add(connection1);
 		user.getConnections().add(connection2);
 		

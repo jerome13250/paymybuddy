@@ -7,4 +7,5 @@ public interface UserService {
     void update(User user);
     User findByEmail(String email);
     Boolean existsByEmail(String email);
+    User getConnectedUser();
 }
