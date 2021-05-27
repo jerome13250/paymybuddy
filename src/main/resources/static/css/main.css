@@ -46,3 +46,14 @@ body {
 .has-error {
     color: red
 }
+
+.btn-secondary:not(:disabled):not(.disabled).active,
+.show>.btn-secondary.dropdown-toggle {
+ color:#fff;
+ background-color:#007bff;
+ border-color:#4e555b;
+}
+
+
+
+
