@@ -39,35 +39,38 @@ public class BankTransactionController {
     	logger.info("GET: /banktransaction");
         model.addAttribute("user", userService.getConnectedUser());//list of transactions + preferred currency
         model.addAttribute("currencies", currencyService.findAll()); //list of accepted currencies in db
+        model.addAttribute("banktransaction",new BankTransaction());
 
         return "banktransaction";
     }
     
     @PostMapping("/banktransactionGetmoney")
     public String postBanktransactionGetMoney(
-    		@Valid @ModelAttribute("bankTransactionGetMoney") BankTransaction bankTransaction, 
+    		@Valid @ModelAttribute("banktransaction") BankTransaction bankTransaction, 
     		BindingResult bindingResult, 
     		Model model) {
     	
     	logger.info("POST: /banktransactionGetmoney");
     	model.addAttribute("currencies", currencyService.findAll()); //list of currencies in database
-    	model.addAttribute("user", userService.getConnectedUser());//list of transactions + preferred currency
+    	User connectedUser = userService.getConnectedUser();
+    	model.addAttribute("user", connectedUser);//list of transactions + preferred currency
     	
     	if (bindingResult.hasErrors()) {        	
-            return "banktransaction";
+            return "redirect:/banktransaction";
         }
         
-        if ( bankTransaction.getAmount().compareTo(new BigDecimal(10000))>0 ) { //FIXME
+        if ( bankTransaction.getAmount().compareTo(connectedUser.getAmount())>0 ) { //FIXME
         	bindingResult.rejectValue("amount", "", "This amount exceeds your account value.");
-            return "banktransaction";
+            return "redirect:/banktransaction";
         }
         
+        //FIXME:need transactional
+        connectedUser.setAmount(connectedUser.getAmount().add(bankTransaction.getAmount()));
+        userService.update(connectedUser);
         bankTransactionService.create(bankTransaction);
         model.addAttribute("user", userService.getConnectedUser());//list of transactions + preferred currency
-    	
-        
+
         return "redirect:/banktransaction";
-       
     }
 	
 }

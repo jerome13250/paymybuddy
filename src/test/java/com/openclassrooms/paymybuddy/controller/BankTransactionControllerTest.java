@@ -69,9 +69,10 @@ class BankTransactionControllerTest {
 		mockMvc.perform(get("/banktransaction"))
 		.andExpect(status().is2xxSuccessful())
 		.andExpect(view().name("banktransaction"))
-		.andExpect(model().size(2))
+		.andExpect(model().size(3))
 		.andExpect(model().attributeExists("user"))
 		.andExpect(model().attributeExists("currencies"))
+		.andExpect(model().attributeExists("banktransaction"))
 		;
 	}
 	

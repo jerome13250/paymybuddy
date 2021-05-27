@@ -12,13 +12,28 @@
 
 <body>
 	<div class="container">
-		<form method="POST" class="mt-4" th:action="@{/banktransactionGetmoney}" >
-			<h2 class="form-signin-heading">Get Money from your bank:</h2>
-			
+		<div class="row">
+			<h2>Your account value: </h2><h2 th:text="${user.amount}"></h2><h2 th:text="${user.currency.name}"></h2>
+		</div>
+	</div>
+
+	<div class="container">
+		<form method="POST" class="mt-4" th:object="${banktransaction}" th:action="@{/banktransactionGetmoney}" >
+
+				<div class="form-check">
+	  				<input class="form-check-input h4" type="radio" name="getOrSendRadioOptions" id="inlineRadio1" value="get">
+	  				<label class="form-check-label h4" for="inlineRadio1">Get Money from your Bank</label>
+				</div>
+				<div class="form-check">
+	 				<input class="form-check-input h4" type="radio" name="getOrSendRadioOptions" id="inlineRadio2" value="send">
+	  				<label class="form-check-label h4" for="inlineRadio2">Send Money to your Bank</label>
+				</div>
+
+
 			<div class="form-row">
 				<div class="col">
-					<input name="amount" type="number" class="form-control" placeholder="Enter money amount" autofocus="true">
-					<span class="has-error" th:text="${error}"></span>
+					<input th:field="*{amount}" type="number" step="0.01" class="form-control" placeholder="Enter money amount" autofocus="true">
+					<span class="has-error" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></span>
 				</div>
 				<div class="col">
 					<select name="currency" class="form-control">

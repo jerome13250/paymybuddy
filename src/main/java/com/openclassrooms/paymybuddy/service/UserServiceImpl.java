@@ -56,6 +56,7 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public void update(User user) {
+		user.setPasswordconfirm(user.getPassword()); //FIXME 
 		logger.debug("Calling update(User user)");		
 		userRepository.save(user);
 	}

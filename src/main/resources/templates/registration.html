@@ -23,28 +23,18 @@
 					<span class="has-error" th:errors="*{global}"> </span>
 				</div>
 			</div>
-
 			<div class="form-group">
-				<input type="text" th:field="*{firstname}" class="form-control"
-					placeholder="First name" autofocus="true"> <span
-					class="has-error" th:if="${#fields.hasErrors('firstname')}"
-					th:errors="*{firstname}"></span>
+				<input type="text" th:field="*{firstname}" class="form-control" placeholder="First name" autofocus="true"> 
+				<span class="has-error" th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}"></span>
 			</div>
-
 			<div class="form-group">
-				<input type="text" th:field="*{lastname}" class="form-control"
-					placeholder="Last name"> <span
-					class="has-error" th:if="${#fields.hasErrors('lastname')}"
-					th:errors="*{lastname}"></span>
+				<input type="text" th:field="*{lastname}" class="form-control" placeholder="Last name"> 
+				<span class="has-error" th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}"></span>
 			</div>
-
 			<div class="form-group">
-				<input type="text" th:field="*{email}" class="form-control"
-					placeholder="Enter your email"> <span
-					class="has-error" th:if="${#fields.hasErrors('email')}"
-					th:errors="*{email}"></span>
+				<input type="text" th:field="*{email}" class="form-control" placeholder="Enter your email"> 
+				<span class="has-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
 			</div>
-
 			<div class="form-group">
 				<input type="password" th:field="*{password}" class="form-control"
 					placeholder="Enter your password"> <span class="has-error"
