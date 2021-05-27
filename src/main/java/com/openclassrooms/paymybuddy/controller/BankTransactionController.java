@@ -79,7 +79,7 @@ public class BankTransactionController {
         bankTransactionService.create(bankTransaction);
         model.addAttribute("user", userService.getConnectedUser());//list of transactions + preferred currency
 
-        return "banktransaction";
+        return "redirect:/banktransaction";
     }
     
     private BankTransactionFormDTO convertToDto(BankTransaction bankTransaction) {

@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -51,8 +52,9 @@ class BankTransactionControllerTest {
 	@MockBean
 	private CurrencyService currencyServiceMock;
 	@MockBean
-	private BankTransactionService bankTransactionService;
-
+	private BankTransactionService bankTransactionServiceMock;
+	@MockBean
+	private ModelMapper modelMapperMock;
 	
 	@WithUserDetails("user@company.com") //user from SpringSecurityWebTestConfig.class
 	@Test
@@ -79,22 +81,20 @@ class BankTransactionControllerTest {
 	@WithUserDetails("user@company.com") //user from SpringSecurityWebTestConfig.class
 	@Test
 	void PostBankTransaction_shouldSucceedAndRedirected() throws Exception {
-		User user = new User(1L, "john", "doe", "johndoe@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),
-				"password1", "", true, "1AX256", new BigDecimal(200), new Currency(), new HashSet<>(), new HashSet<>(), new HashSet<>() );
-		when(userServiceMock.getConnectedUser()).thenReturn(user);
 		Currency currency1 = new Currency(1L,"Euro","EUR","€");
 		List<Currency> currencies = Arrays.asList(currency1);
 		when(currencyServiceMock.findAll()).thenReturn(currencies);
+		User user = new User(1L, "john", "doe", "johndoe@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),
+				"password1", "", true, "1AX256", new BigDecimal(200), new Currency(), new HashSet<>(), new HashSet<>(), new HashSet<>() );
+		when(userServiceMock.getConnectedUser()).thenReturn(user);
 		
-		mockMvc.perform(post("/banktransactionGetmoney")
+		mockMvc.perform(post("/banktransaction")
 				.param("amount", "1500")
 				.param("currency", "3")
+				.param("getOrSendRadioOptions","send")
 				.with(csrf()))
 		.andExpect(status().is3xxRedirection())
 		.andExpect(redirectedUrl("/banktransaction"))
-		.andExpect(model().size(2))
-		.andExpect(model().attributeExists("user"))
-		.andExpect(model().attributeExists("currencies"))
 		;
 	}
 
