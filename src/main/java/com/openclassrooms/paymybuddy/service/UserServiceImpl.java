@@ -2,6 +2,7 @@ package com.openclassrooms.paymybuddy.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Currency;
 import java.util.HashSet;
 
 import org.slf4j.Logger;
@@ -10,13 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.openclassrooms.paymybuddy.model.Currency;
+import com.openclassrooms.paymybuddy.exceptions.UserAmountException;
 import com.openclassrooms.paymybuddy.model.Role;
 import com.openclassrooms.paymybuddy.model.User;
-import com.openclassrooms.paymybuddy.repositories.CurrencyRepository;
 import com.openclassrooms.paymybuddy.repositories.RoleRepository;
 import com.openclassrooms.paymybuddy.repositories.UserRepository;
-import com.openclassrooms.paymybuddy.validation.PasswordEquality;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -30,9 +29,9 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private SecurityService securityService;
 	@Autowired
-	private CurrencyRepository currencyRepository;
-	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	@Autowired
+	private CalculationCurrencyService calculationCurrencyService;
 
 	@Override
 	public void create(User user) {
@@ -74,6 +73,22 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User getConnectedUser() {
 		return findByEmail(securityService.getCurrentUserDetailsUserName());
+	}
+
+	@Override
+	public void updateAmount(User user, BigDecimal amount, Currency currency) throws UserAmountException { 
+		
+		BigDecimal result = calculationCurrencyService.sumCurrencies(user.getAmount(), user.getCurrency(), amount, currency);
+		if (result.compareTo(new BigDecimal(0))==-1) {
+			throw new UserAmountException("InsufficientFunds", "This amount exceeds your account value.");
+		}
+		if (result.compareTo(new BigDecimal(9999999))==1) {
+			throw new UserAmountException("UserAmountExceedsMax", "The user amount exceeds Max value.");
+		}
+		
+		user.setAmount(result);
+		update(user);
+		
 	}
 
 }

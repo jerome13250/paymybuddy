@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Currency;
 import java.util.HashSet;
 
 import org.junit.jupiter.api.Test;
@@ -22,14 +23,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.context.support.WithUserDetails;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.openclassrooms.paymybuddy.model.Currency;
 import com.openclassrooms.paymybuddy.model.User;
 import com.openclassrooms.paymybuddy.service.SecurityService;
 import com.openclassrooms.paymybuddy.service.UserService;
-import com.openclassrooms.paymybuddy.testconfig.SpringSecurityWebTestConfig;
+import com.openclassrooms.paymybuddy.testconfig.SpringWebTestConfig;
 
 /**
  * Unit test for UserController
@@ -40,7 +39,7 @@ import com.openclassrooms.paymybuddy.testconfig.SpringSecurityWebTestConfig;
 //@WebMvcTest tells Spring Boot to instantiate only the web layer and not the entire context
 @WebMvcTest(controllers = UserController.class) 
 //Need to create a UserDetailsService in SpringSecurityWebTestConfig.class because @Service are not loaded by @WebMvcTest :
-@Import(SpringSecurityWebTestConfig.class)
+@Import(SpringWebTestConfig.class)
 
 class UserControllerTest {
 
@@ -158,9 +157,9 @@ class UserControllerTest {
 	void PostConnectionPage_shouldSucceed() throws Exception {
 		//
 		User user = new User(1L, "john", "doe", "johndoe@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),
-				"password1", "", true, "1AX256", new BigDecimal(200), new Currency(), new HashSet<>(), new HashSet<>(), new HashSet<>() );
+				"password1", "", true, "1AX256", new BigDecimal(200), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>() );
 		User newConnection = new User(2L, "michael", "stone", "michaelstone@mail.com", LocalDateTime.of(2030, 01, 25, 00, 45),
-				"password2", "", true, "12HGJ44", new BigDecimal(500), new Currency(), new HashSet<>(), new HashSet<>(), new HashSet<>() );		
+				"password2", "", true, "12HGJ44", new BigDecimal(500), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>() );		
 		
 		when(securityServiceMock.getCurrentUserDetailsUserName()).thenReturn("johndoe@mail.com");
 		when(userServiceMock.findByEmail("johndoe@mail.com")).thenReturn(user);
@@ -184,9 +183,9 @@ class UserControllerTest {
 	void PostConnectionPage_shouldFail_connectionUnknown() throws Exception {
 		//
 		User user = new User(1L, "john", "doe", "johndoe@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),
-				"password1", "", true, "1AX256", new BigDecimal(200), new Currency(), new HashSet<>(), new HashSet<>(), new HashSet<>() );
+				"password1", "", true, "1AX256", new BigDecimal(200), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>() );
 		User newConnection = new User(2L, "michael", "stone", "michaelstone@mail.com", LocalDateTime.of(2030, 01, 25, 00, 45),
-				"password2", "", true, "12HGJ44", new BigDecimal(500), new Currency(), new HashSet<>(), new HashSet<>(), new HashSet<>() );		
+				"password2", "", true, "12HGJ44", new BigDecimal(500), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>() );		
 		
 		when(securityServiceMock.getCurrentUserDetailsUserName()).thenReturn("johndoe@mail.com");
 		when(userServiceMock.findByEmail("johndoe@mail.com")).thenReturn(user);
@@ -213,7 +212,7 @@ class UserControllerTest {
 	void PostConnectionPage_shouldFail_connectionToHimself() throws Exception {
 		//
 		User user = new User(1L, "john", "doe", "johndoe@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),
-				"password1", "", true, "1AX256", new BigDecimal(200), new Currency(), new HashSet<>(), new HashSet<>(), new HashSet<>() );
+				"password1", "", true, "1AX256", new BigDecimal(200), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>() );
 		
 		when(securityServiceMock.getCurrentUserDetailsUserName()).thenReturn("johndoe@mail.com");
 		when(userServiceMock.findByEmail("johndoe@mail.com")).thenReturn(user);
@@ -239,11 +238,11 @@ class UserControllerTest {
 	void PostConnectionDeletePage_shouldSucceed() throws Exception {
 		//
 		User user = new User(1L, "john", "doe", "johndoe@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),
-				"password1", "", true, "1AX256", new BigDecimal(200), new Currency(), new HashSet<>(), new HashSet<>(), new HashSet<>() );
+				"password1", "", true, "1AX256", new BigDecimal(200), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>() );
 		User connection1 = new User(2L, "michael", "stone", "michaelstone@mail.com", LocalDateTime.of(2030, 01, 25, 00, 45),
-				"password2", "", true, "12HGJ44", new BigDecimal(500), new Currency(), new HashSet<>(), new HashSet<>(), new HashSet<>() );	
+				"password2", "", true, "12HGJ44", new BigDecimal(500), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>() );	
 		User connection2 = new User(3L, "jason", "hill", "jasonhill@mail.com", LocalDateTime.of(2034, 01, 25, 00, 45),
-				"password3", "", true, "12HGJ88", new BigDecimal(800), new Currency(), new HashSet<>(), new HashSet<>(), new HashSet<>() );	
+				"password3", "", true, "12HGJ88", new BigDecimal(800), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>() );	
 		user.getConnections().add(connection1);
 		user.getConnections().add(connection2);
 		

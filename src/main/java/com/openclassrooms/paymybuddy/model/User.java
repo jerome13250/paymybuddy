@@ -2,6 +2,7 @@ package com.openclassrooms.paymybuddy.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Currency;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -59,8 +60,6 @@ public class User{
 	private String bankaccountnumber;
 	private BigDecimal amount;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "currency_id")
 	private Currency currency;
 	
 	@ManyToMany

@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -37,8 +39,6 @@ public class BankTransaction {
 	
 	private BigDecimal amount;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "currency_id")
-	private Currency currency;
+	private java.util.Currency currency;
 
 }

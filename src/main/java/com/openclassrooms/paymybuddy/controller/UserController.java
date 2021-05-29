@@ -1,30 +1,19 @@
 package com.openclassrooms.paymybuddy.controller;
 
 import java.security.Principal;
-import java.time.LocalDateTime;
-import java.util.HashSet;
-
-import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ResolvableType;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.openclassrooms.paymybuddy.model.Role;
 import com.openclassrooms.paymybuddy.model.User;
-import com.openclassrooms.paymybuddy.service.CurrencyService;
 import com.openclassrooms.paymybuddy.service.SecurityService;
 import com.openclassrooms.paymybuddy.service.UserService;
 
@@ -40,9 +29,6 @@ public class UserController {
     private UserService userService;
 
 	@Autowired
-    private CurrencyService currencyService;
-	
-    @Autowired
     private SecurityService securityService;
 
 	@GetMapping("/")

@@ -58,12 +58,12 @@
 			
 			<div class="form-group">
 				<select th:field="*{currency}" class="form-control">
-                         <option th:each="entry : ${currencies}"
-                                 th:value="${entry.id}"
-                                 th:utext="${entry.code}">
-                         </option>
-                  </select> 
-					
+					<!--/* Accessing directly bean "currenciesAllowed" in Spring application context: */-->
+					<option
+						th:each="entry : ${@currenciesAllowed.getCurrenciesAllowedList()}"
+						th:value="${entry}" th:text="${entry.getDisplayName()}">
+					</option>
+				</select>
 			</div>
 
 			<button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
