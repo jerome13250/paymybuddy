@@ -60,7 +60,7 @@ class BankTransactionControllerTest {
 		//ARRANGE
 		User user = new User(1L, "john", "doe", "johndoe@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),
 				"password1", "", true, "1AX256", new BigDecimal(200), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>() );
-		when(userServiceMock.getConnectedUser()).thenReturn(user);
+		when(userServiceMock.getCurrentUser()).thenReturn(user);
 
 		
 		//ACT+ASSERT
@@ -79,7 +79,7 @@ class BankTransactionControllerTest {
 		
 		User user = new User(1L, "john", "doe", "johndoe@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),
 				"password1", "", true, "1AX256", new BigDecimal(10000), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>() );
-		when(userServiceMock.getConnectedUser()).thenReturn(user);
+		when(userServiceMock.getCurrentUser()).thenReturn(user);
 		
 		mockMvc.perform(post("/banktransaction")
 				.param("amount", "1500")
@@ -97,7 +97,7 @@ class BankTransactionControllerTest {
 		
 		User user = new User(1L, "john", "doe", "johndoe@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),
 				"password1", "", true, "1AX256", new BigDecimal(50), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>() );
-		when(userServiceMock.getConnectedUser()).thenReturn(user);
+		when(userServiceMock.getCurrentUser()).thenReturn(user);
 		doThrow(UserAmountException.class).when(userServiceMock).updateAmount(any(User.class),any(BigDecimal.class),any(Currency.class));
 		
 		mockMvc.perform(post("/banktransaction")
@@ -118,7 +118,7 @@ class BankTransactionControllerTest {
 		
 		User user = new User(1L, "john", "doe", "johndoe@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),
 				"password1", "", true, "1AX256", new BigDecimal(10000), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>() );
-		when(userServiceMock.getConnectedUser()).thenReturn(user);
+		when(userServiceMock.getCurrentUser()).thenReturn(user);
 		
 		mockMvc.perform(post("/banktransaction")
 				.param("amount", "1500")
@@ -138,7 +138,7 @@ class BankTransactionControllerTest {
 		
 		User user = new User(1L, "john", "doe", "johndoe@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),
 				"password1", "", true, "1AX256", new BigDecimal(10000), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>() );
-		when(userServiceMock.getConnectedUser()).thenReturn(user);
+		when(userServiceMock.getCurrentUser()).thenReturn(user);
 		
 		mockMvc.perform(post("/banktransaction")
 				.param("amount", "1500")
@@ -156,7 +156,7 @@ class BankTransactionControllerTest {
 		
 		User user = new User(1L, "john", "doe", "johndoe@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),
 				"password1", "", true, "1AX256", new BigDecimal(10000), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>() );
-		when(userServiceMock.getConnectedUser()).thenReturn(user);
+		when(userServiceMock.getCurrentUser()).thenReturn(user);
 		
 		mockMvc.perform(post("/banktransaction")
 				//.param("amount", "1500")
@@ -176,7 +176,7 @@ class BankTransactionControllerTest {
 		
 		User user = new User(1L, "john", "doe", "johndoe@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),
 				"password1", "", true, "1AX256", new BigDecimal(10000), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>() );
-		when(userServiceMock.getConnectedUser()).thenReturn(user);
+		when(userServiceMock.getCurrentUser()).thenReturn(user);
 		
 		mockMvc.perform(post("/banktransaction")
 				.param("amount", "1500")
@@ -196,7 +196,7 @@ class BankTransactionControllerTest {
 		
 		User user = new User(1L, "john", "doe", "johndoe@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),
 				"password1", "", true, "1AX256", new BigDecimal(10000), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>() );
-		when(userServiceMock.getConnectedUser()).thenReturn(user);
+		when(userServiceMock.getCurrentUser()).thenReturn(user);
 		
 		mockMvc.perform(post("/banktransaction")
 				.param("amount", "1500")
@@ -216,7 +216,7 @@ class BankTransactionControllerTest {
 		
 		User user = new User(1L, "john", "doe", "johndoe@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),
 				"password1", "", true, "1AX256", new BigDecimal(5000), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>() );
-		when(userServiceMock.getConnectedUser()).thenReturn(user);
+		when(userServiceMock.getCurrentUser()).thenReturn(user);
 		
 		mockMvc.perform(post("/banktransaction")
 				.param("amount", "99999999") 

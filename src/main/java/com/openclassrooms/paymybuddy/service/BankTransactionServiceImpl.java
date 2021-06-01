@@ -24,7 +24,7 @@ public class BankTransactionServiceImpl implements BankTransactionService {
 	@Override
 	public void create(BankTransaction BankTransaction) {
 		logger.debug("Calling create(BankTransaction BankTransaction)");
-		User currentUser = userService.getConnectedUser();
+		User currentUser = userService.getCurrentUser();
 		
 		BankTransaction.setBankaccountnumber(currentUser.getBankaccountnumber());
 		BankTransaction.setDatetime(LocalDateTime.now());

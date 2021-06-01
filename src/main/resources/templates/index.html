@@ -2,18 +2,82 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
-<meta charset="ISO-8859-1">
+<meta charset="UTF-8">
 <title>Product Manager</title>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+	integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+	crossorigin="anonymous">
+<link href="/css/main.css" rel="stylesheet">
 </head>
+
 <body>
-<div align="center">	
+
+	<!-- Navigation -->
+	<div th:replace="fragments/general.html :: navigation"></div>
+
+	<div class="container">
+		<!-- JUMBOTRON -->
+		<div class="row">
+			<div class="col">
+				<div class="jumbotron text-center">
+					<img src="/img/PayMyBuddy_Big.png" class="img-fluid"
+						alt="PayMyBuddy logo">
+					<h1 class="text-success motto">Welcome to Pay My Buddy&nbsp;!</h1>
+					<h3 class="text-primary">
+						We make moving your money easy&nbsp;!!!
+						</h1>
+				</div>
+			</div>
+		</div>
+		<!-- CARDS -->
+		<div class="row">
+			<div class="col-12 col-md-6 col-lg-4">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Devenez diplômé</h5>
+						<p class="card-text">De zéro à héros, obtenez un diplôme en
+							informatique.</p>
+					</div>
+				</div>
+			</div>
+			<div class="col-12 col-md-6 col-lg-4">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Formateurs de qualités</h5>
+						<p class="card-text">Tous nos cours sont réalisés par les
+							meilleurs informaticiens.</p>
+					</div>
+				</div>
+			</div>
+			<div class="col-12 col-md-6 col-lg-4">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Un travail graranti</h5>
+						<p class="card-text">Nous vous garantissons un emploi à
+							l'issue de votre formation.</p>
+					</div>
+				</div>
+			</div>
 
 
-	<form th:action="@{/logout}" method="post">
-		<input type="submit" value="Logout" />
-	</form>
+		</div>
 
 
-</div>
+		<div align="center">
+		<form th:action="@{/logout}" method="post">
+			<input type="submit" value="Logout" />
+		</form>
+	</div>
+</body>
+
+
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 </body>
 </html>

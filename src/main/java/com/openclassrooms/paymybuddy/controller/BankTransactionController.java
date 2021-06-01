@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,7 +44,7 @@ public class BankTransactionController {
     @GetMapping("/banktransaction")
     public String getBanktransaction(Model model) { 
     	logger.info("GET: /banktransaction");
-        model.addAttribute("user", userService.getConnectedUser());//list of transactions + preferred currency
+        model.addAttribute("user", userService.getCurrentUser());//list of transactions + preferred currency
         model.addAttribute("banktransactionFormDTO",new BankTransactionFormDTO());
         return "banktransaction";
     }
@@ -56,7 +57,7 @@ public class BankTransactionController {
     		Model model) {
     	
     	logger.info("POST: /banktransaction");
-    	User connectedUser = userService.getConnectedUser();
+    	User connectedUser = userService.getCurrentUser();
     	model.addAttribute("user", connectedUser);//list of transactions + preferred currency
     	
     	if (bindingResult.hasErrors()) {        	

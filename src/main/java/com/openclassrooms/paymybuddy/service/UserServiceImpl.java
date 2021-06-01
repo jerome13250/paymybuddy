@@ -8,6 +8,9 @@ import java.util.HashSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +19,8 @@ import com.openclassrooms.paymybuddy.model.Role;
 import com.openclassrooms.paymybuddy.model.User;
 import com.openclassrooms.paymybuddy.repositories.RoleRepository;
 import com.openclassrooms.paymybuddy.repositories.UserRepository;
+import com.openclassrooms.paymybuddy.utils.paging.Paged;
+import com.openclassrooms.paymybuddy.utils.paging.Paging;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -71,7 +76,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User getConnectedUser() {
+	public User getCurrentUser() {
 		return findByEmail(securityService.getCurrentUserDetailsUserName());
 	}
 
@@ -91,4 +96,17 @@ public class UserServiceImpl implements UserService {
 		
 	}
 
+	//TODO : filter by ID 
+	@Override
+	public Paged<User> getCurrentUserConnectionPage(int pageNumber, int size) {
+        PageRequest request = PageRequest.of(pageNumber - 1, size, Sort.by(Sort.Direction.DESC, "id"));
+
+        
+        //TODO: find current user id
+        Page<User> postPage = userRepository.findConnectionById(54L,request);
+        return new Paged<>(postPage, Paging.of(postPage.getTotalPages(), pageNumber, size));
+    }
+	
+	
+	
 }

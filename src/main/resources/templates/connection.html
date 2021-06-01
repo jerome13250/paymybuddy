@@ -1,68 +1,112 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="utf-8">
-<title>Connections</title>
-<link rel="stylesheet"
+    <meta charset="UTF-8"/>
+    <title>Connections</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
 	integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
 	crossorigin="anonymous">
-<link href="/css/main.css" rel="stylesheet">
+	<link href="/css/main.css" rel="stylesheet">
 </head>
-
 <body>
 
-	<div class="container">
-		<form method="POST" class="mt-4" th:action="@{/connection}" >
-			<h2 class="form-signin-heading">Add a new contact:</h2>
-			<div class="form-group">
-				<input name="email" type="text" class="form-control" placeholder="Email to add as connection" autofocus="true">
-				<span class="has-error" th:text="${error}"></span>
+	<!-- Navigation -->
+	<div class="bg-success">
+		<div class="container">
+			<div class="row">
+				<nav class="col navbar navbar-expand-lg navbar-dark bg-success">
+					<a class="navbar-brand" href="/"> <img
+						src="/img/paymybuddy.png" width="132" height="52" alt="Site logo">
+					</a>
+					<button class="navbar-toggler" type="button" data-toggle="collapse"
+						data-target="#navbarContent"
+						aria-controls="navbarSupportedContent" aria-expanded="false"
+						aria-label="Toggle navigation">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+					<div id="navbarContent" class="collapse navbar-collapse">
+						<ul class="navbar-nav">
+							<li class="nav-item active"><a class="nav-link" href="/">Home</a></li>
+							<li class="nav-item"><a class="nav-link" href="#">Transfert</a>
+							<li class="nav-item"><a class="nav-link" href="#">Profile</a>
+							<li class="nav-item"><a class="nav-link" href="#">Contact</a>
+							<li class="nav-item"><a class="nav-link" href="#">Log Off</a>
+							</li>
+						</ul>
+					</div>
+				</nav>
 			</div>
-			<button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+		</div>
+	</div>
+
+	<!-- FORM : Add a connection -->
+	<div class="container">
+		<form method="POST" class="form-inline" th:action="@{/connection}" >
+				<label for="email" class="my-2 mx-2">Add a new contact:</label>
+				<input name="email" id="email" type="text" class="form-control my-2 mx-2" placeholder="Email to add as connection" autofocus="true">
+				<span class="has-error" th:text="${error}"></span>
+				<button class="btn btn-lg btn-primary my-2 mx-2" type="submit">Submit</button>
 		</form>
 	</div>
 
-	<div class="container">
-		<h2 class="mt-4">Contacts</h2>
-		<table class="table">
-			<thead class="thead-light">
-				<tr>
-					<th class="text-left">Email</th>
-					<th class="text-left">First Name</th>
-					<th class="text-left">Last Name</th>
-					<th class="text-left"></th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="connection : ${user.connections}">
-					<td th:text="${connection.email}"></td>
-					<td th:text="${connection.firstname}"></td>
-					<td th:text="${connection.lastname}"></td>
-					<td> 
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-10 mt-5 mb-5">
+            <table id="posts" class="table table-bordered table-responsive-sm">
+                <thead>
+                <tr>
+                    <th>Firstname</th>
+                    <th>Lastname</th>
+                    <th>Email</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="post : ${posts.page}">
+                    <td th:text="${post.firstname}">id</td>
+                    <td th:text="${post.lastname}">title</td>
+                    <td th:text="${post.email}">body</td>
+                    <td> 
 						<form method="POST" th:action="@{/connectionDelete}" >
-						<button class="btn btn-info" type="submit" name="id" th:value="${connection.id}">Delete</button>
+						<button class="btn btn-danger" type="submit" name="id" th:value="${post.id}">Delete</button>
 						</form>
 					</td>
+                </tr>
+                </tbody>
+            </table>
 
-				</tr>
-			</tbody>
-		</table>
-		<hr />
+            <nav aria-label="Page navigation" class="paging">
+                <ul class="pagination" th:if="${posts.page.totalPages > 1}">
+                    <li class="page-item" th:classappend="${!posts.paging.isPrevEnabled()? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{'/connection?pageNumber=' + ${posts.paging.pageNumber - 1}}"
+                           tabindex="-1">Previous</a>
+                    </li>
+                    <th:block th:each="item : ${posts.paging.getItems()}">
+                        <li class="page-item" th:classappend="${item.index == posts.paging.pageNumber? 'active' : ''}"
+                            th:if="${item.pageItemType.name() == 'PAGE'}">
+                            <a class="page-link" th:href="@{'/connection?pageNumber=' + ${item.index}}"
+                               th:text="${item.index}"></a>
+                        </li>
+                        <li class="page-item disabled" th:if="${item.pageItemType.name() == 'DOTS'}">
+                            <a class="page-link" href="#">...</a>
+                        </li>
+                    </th:block>
+                    <li class="page-item" th:classappend="${!posts.paging.isNextEnabled()? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{'/connection?pageNumber=' + ${posts.paging.pageNumber + 1}}">Next</a>
+                    </li>
+                </ul>
+            </nav>
 
-	</div>
+        </div>
+    </div>
+</div>
 
-	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-		integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-		crossorigin="anonymous"></script>
-	<script
-		src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
-		integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
-		crossorigin="anonymous"></script>
-	<script
-		src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
-		integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
-		crossorigin="anonymous"></script>
-	<script src="/js/main.js"></script>
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 </body>
 </html>

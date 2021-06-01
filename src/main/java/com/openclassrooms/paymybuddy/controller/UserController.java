@@ -45,47 +45,6 @@ public class UserController {
 	
 
     
-    @GetMapping("/connection")
-    public String connection(Model model) {
-    	logger.info("Calling: GET /connection");
-    	model.addAttribute("user", userService.getConnectedUser());
-    	return "connection";
-    }
-    
-    @PostMapping("/connection")
-    public String connectionAdd(@RequestParam String email , Model model) { 
-    	logger.info("Calling: POST /connection");
-    	User user = userService.getConnectedUser();
-    	model.addAttribute("user", user);
-    	
-    	if ( !userService.existsByEmail(email) ) {
-    		model.addAttribute("error", "Email Unknown");
-            return "connection";
-        }
-    	
-    	if ( user.getEmail().equalsIgnoreCase(email) ) {
-    		model.addAttribute("error", "You can't add yourself as a connection");
-            return "connection";
-        }
-    	
-        User newConnection = userService.findByEmail(email);
-    	user.getConnections().add(newConnection);
-    	userService.update(user);
-
-    	return "connection";
-    }
-    
-    
-    @PostMapping("/connectionDelete")
-    public String connectionDelete(@RequestParam Long id) { 
-    	logger.info("Calling: POST /connectionDelete");
-    	User user = userService.getConnectedUser();
-    	user.getConnections().removeIf(connectionUser -> (connectionUser.getId()==id) );
-    	userService.update(user);
-        
-        return "redirect:/connection";
-    }
-    
     @GetMapping("/principal")
     @ResponseBody
     public Principal retrievePrincipal(Principal principal) {
