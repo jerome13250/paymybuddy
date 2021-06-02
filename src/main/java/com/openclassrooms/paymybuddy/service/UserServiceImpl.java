@@ -96,14 +96,10 @@ public class UserServiceImpl implements UserService {
 		
 	}
 
-	//TODO : filter by ID 
 	@Override
 	public Paged<User> getCurrentUserConnectionPage(int pageNumber, int size) {
         PageRequest request = PageRequest.of(pageNumber - 1, size, Sort.by(Sort.Direction.DESC, "id"));
-
-        
-        //TODO: find current user id
-        Page<User> page = userRepository.findConnectionById(54L,request);
+        Page<User> page = userRepository.findConnectionById(getCurrentUser().getId(),request);
         return new Paged<>(page, Paging.of(page.getTotalPages(), pageNumber, size));
     }
 	

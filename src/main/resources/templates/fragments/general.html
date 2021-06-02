@@ -1,15 +1,16 @@
 <!DOCTYPE HTML>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8"/>
-    <title>General</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta charset="UTF-8" />
+<title>General</title>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="stylesheet"
+<link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
 	integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
 	crossorigin="anonymous">
-	<link href="/css/main.css" rel="stylesheet">
+<link href="/css/main.css" rel="stylesheet">
 </head>
 <body>
 
@@ -18,8 +19,8 @@
 		<div class="container">
 			<div class="row">
 				<nav class="col navbar navbar-expand-lg navbar-dark bg-success">
-					<a class="navbar-brand" href="/"> 
-						<img src="/img/paymybuddy.png" width="132" height="52" alt="Site logo">
+					<a class="navbar-brand" href="/"> <img
+						src="/img/paymybuddy.png" width="132" height="52" alt="Site logo">
 					</a>
 					<button class="navbar-toggler" type="button" data-toggle="collapse"
 						data-target="#navbarContent"
@@ -29,18 +30,61 @@
 					</button>
 					<div id="navbarContent" class="collapse navbar-collapse">
 						<ul class="navbar-nav">
-							<li th:classappend="${#httpServletRequest.getRequestURI() == '/' ? 'active':''}" class="nav-item"><a class="nav-link" href="/">Home</a></li>
-							<li th:classappend="${#httpServletRequest.getRequestURI() == '/banktransaction' ? 'active':''}" class="nav-item"><a class="nav-link" href="/banktransaction">Bank Transfert</a>
-							<li th:classappend="${#httpServletRequest.getRequestURI() == '/connection' ? 'active':''}" class="nav-item"><a class="nav-link" href="/connection">Your Buddies</a>
-							<li th:classappend="${#httpServletRequest.getRequestURI() == '/usertransaction' ? 'active':''}" class="nav-item"><a class="nav-link" href="/usertransaction">Buddy Transfert</a>
-							<li class="nav-item"><a class="nav-link" href="/logout">Log Out</a>
-							</li>
+							<li
+								th:classappend="${#httpServletRequest.getRequestURI() == '/' ? 'active':''}"
+								class="nav-item"><a class="nav-link" href="/">Home</a></li>
+							<li
+								th:classappend="${#httpServletRequest.getRequestURI() == '/banktransaction' ? 'active':''}"
+								class="nav-item"><a class="nav-link"
+								href="/banktransaction">Bank Transfert</a>
+							<li
+								th:classappend="${#httpServletRequest.getRequestURI() == '/connection' ? 'active':''}"
+								class="nav-item"><a class="nav-link" href="/connection">Your
+									Buddies</a>
+							<li
+								th:classappend="${#httpServletRequest.getRequestURI() == '/usertransaction' ? 'active':''}"
+								class="nav-item"><a class="nav-link"
+								href="/usertransaction">Buddy Transfert</a>
+							<li class="nav-item"><a class="nav-link" href="/logout">Log
+									Out</a></li>
 						</ul>
 					</div>
 				</nav>
 			</div>
 		</div>
 	</div>
+
+
+	<!-- PAGED -->
+	<nav aria-label="Page navigation" class="paging" th:fragment="paged">
+		<ul class="pagination" th:if="${paged.page.totalPages > 1}">
+			<li class="page-item"
+				th:classappend="${!paged.paging.isPrevEnabled()? 'disabled' : ''}">
+				<a class="page-link"
+				th:href="@{'?pageNumber=' + ${paged.paging.pageNumber - 1}}"
+				tabindex="-1">Previous</a>
+			</li>
+			<th:block th:each="item : ${paged.paging.getItems()}">
+				<li class="page-item"
+					th:classappend="${item.index == paged.paging.pageNumber? 'active' : ''}"
+					th:if="${item.pageItemType.name() == 'PAGE'}">
+						<a class="page-link"
+						th:href="@{'?pageNumber=' + ${item.index}}"
+						th:text="${item.index}">
+						</a>
+				</li>
+				<li class="page-item disabled"
+					th:if="${item.pageItemType.name() == 'DOTS'}"><a
+					class="page-link" href="#">...</a></li>
+			</th:block>
+			<li class="page-item"
+				th:classappend="${!paged.paging.isNextEnabled()? 'disabled' : ''}">
+				<a class="page-link"
+				th:href="@{'?pageNumber=' + ${paged.paging.pageNumber + 1}}">Next</a>
+			</li>
+		</ul>
+	</nav>
+
 
 	<!-- Footer -->
 	<div class="bg-light mt-5" th:fragment="footer">
@@ -50,9 +94,11 @@
 					<ul class="list-inline text-center">
 						<li class="list-inline-item"><a href="#">About us</a></li>
 						<li class="list-inline-item">&middot;</li>
-						<li class="list-inline-item"><a href="#">Privacy And Policy</a></li>
+						<li class="list-inline-item"><a href="#">Privacy And
+								Policy</a></li>
 						<li class="list-inline-item">&middot;</li>
-						<li class="list-inline-item"><a href="#">Terms and Conditions</a></li>
+						<li class="list-inline-item"><a href="#">Terms and
+								Conditions</a></li>
 					</ul>
 				</div>
 			</div>
@@ -61,8 +107,16 @@
 
 
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+		integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+		integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+		integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+		crossorigin="anonymous"></script>
 </body>
 </html>

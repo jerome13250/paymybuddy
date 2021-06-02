@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,7 +22,6 @@ import com.openclassrooms.paymybuddy.model.BankTransaction;
 import com.openclassrooms.paymybuddy.model.User;
 import com.openclassrooms.paymybuddy.model.dto.BankTransactionFormDTO;
 import com.openclassrooms.paymybuddy.service.BankTransactionService;
-import com.openclassrooms.paymybuddy.service.SecurityService;
 import com.openclassrooms.paymybuddy.service.UserService;
 
 @Controller
@@ -42,10 +40,20 @@ public class BankTransactionController {
     private CurrenciesAllowed currenciesAllowed;
 	
     @GetMapping("/banktransaction")
-    public String getBanktransaction(Model model) { 
+    public String getBanktransaction(
+    		@RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
+            @RequestParam(value = "size", required = false, defaultValue = "5") int size, 
+            Model model) { 
     	logger.info("GET: /banktransaction");
-        model.addAttribute("user", userService.getCurrentUser());//list of transactions + preferred currency
-        model.addAttribute("banktransactionFormDTO",new BankTransactionFormDTO());
+    	
+    	User user = userService.getCurrentUser();
+        model.addAttribute("user", user);//needed to display current user amount + currency
+        model.addAttribute("paged", bankTransactionService.getCurrentUserBankTransactionPage(pageNumber, size));
+        
+        BankTransactionFormDTO bankTransactionFormDTO = new BankTransactionFormDTO();
+        bankTransactionFormDTO.setCurrency(user.getCurrency()); //sets by default the form currency to currency of the user.
+        bankTransactionFormDTO.setGetOrSendRadioOptions("send"); //sets by default the form GetOrSendRadioOptions to "send".
+        model.addAttribute("banktransactionFormDTO",bankTransactionFormDTO);
         return "banktransaction";
     }
     
@@ -59,6 +67,7 @@ public class BankTransactionController {
     	logger.info("POST: /banktransaction");
     	User connectedUser = userService.getCurrentUser();
     	model.addAttribute("user", connectedUser);//list of transactions + preferred currency
+    	model.addAttribute("paged", bankTransactionService.getCurrentUserBankTransactionPage(1, 5));
     	
     	if (bindingResult.hasErrors()) {        	
             return "banktransaction";
