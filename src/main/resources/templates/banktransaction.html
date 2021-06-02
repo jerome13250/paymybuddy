@@ -11,6 +11,9 @@
 </head>
 
 <body>
+	<!-- Navigation -->
+	<div th:replace="fragments/general.html :: navigation"></div>
+
 	<div class="container">
 		<div class="row">
 			<h2>Your account value: </h2><h2 th:text="${user.amount}"></h2><h2 th:text="${user.currency}"></h2>

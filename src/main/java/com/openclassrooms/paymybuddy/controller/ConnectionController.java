@@ -16,45 +16,33 @@ import com.openclassrooms.paymybuddy.service.UserService;
 public class ConnectionController {
 
 	Logger logger = LoggerFactory.getLogger(ConnectionController.class);
-	
+
 	@Autowired
     private UserService userService;
-	
-    @GetMapping("/connectionOld")
-    public String connection(Model model) {
-    	logger.info("Calling: GET /connection");
-    	model.addAttribute("user", userService.getCurrentUser());
-    	return "connectionOld";
-    }
-    
-    //*****************************************************
-    //Test de pagination
-    //*****************************************************
+
     @GetMapping("/connection")
     public String connectionTest(
     		@RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
             @RequestParam(value = "size", required = false, defaultValue = "5") int size, 
             Model model) {
-        model.addAttribute("posts", userService.getCurrentUserConnectionPage(pageNumber, size));
+        model.addAttribute("paged", userService.getCurrentUserConnectionPage(pageNumber, size));
         return "connection";
     }
-    
-    
-    
+
     @PostMapping("/connection")
     public String connectionAdd(@RequestParam String email , Model model) { 
     	logger.info("Calling: POST /connection");
     	User user = userService.getCurrentUser();
-    	
+    	//check connection mail exists in DB:
     	if ( !userService.existsByEmail(email) ) {
     		model.addAttribute("error", "Email Unknown");
-    		model.addAttribute("posts", userService.getCurrentUserConnectionPage(1, 5));
+    		model.addAttribute("paged", userService.getCurrentUserConnectionPage(1, 5));
             return "connection";
         }
-    	
+    	//Check connection to himself:
     	if ( user.getEmail().equalsIgnoreCase(email) ) {
     		model.addAttribute("error", "You can't add yourself as a connection");
-    		model.addAttribute("posts", userService.getCurrentUserConnectionPage(1, 5));
+    		model.addAttribute("paged", userService.getCurrentUserConnectionPage(1, 5));
             return "connection";
         }
     	
@@ -62,11 +50,10 @@ public class ConnectionController {
     	user.getConnections().add(newConnection);
     	userService.update(user);
 
-    	model.addAttribute("posts", userService.getCurrentUserConnectionPage(1, 5));
+    	model.addAttribute("paged", userService.getCurrentUserConnectionPage(1, 5));
     	return "connection";
     }
-    
-    
+
     @PostMapping("/connectionDelete")
     public String connectionDelete(@RequestParam Long id) { 
     	logger.info("Calling: POST /connectionDelete");

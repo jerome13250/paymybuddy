@@ -103,8 +103,8 @@ public class UserServiceImpl implements UserService {
 
         
         //TODO: find current user id
-        Page<User> postPage = userRepository.findConnectionById(54L,request);
-        return new Paged<>(postPage, Paging.of(postPage.getTotalPages(), pageNumber, size));
+        Page<User> page = userRepository.findConnectionById(54L,request);
+        return new Paged<>(page, Paging.of(page.getTotalPages(), pageNumber, size));
     }
 	
 	

@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
  * </a>
  * </p>
  * 
- * @param <T>
+ * @param <T> the model object that needs to be paged. Same as the classic Spring Page<T>.
  */
 @Data
 @AllArgsConstructor

@@ -1,0 +1,108 @@
+package com.openclassrooms.paymybuddy.controller;
+
+import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.web.servlet.MockMvc;
+
+import com.openclassrooms.paymybuddy.service.SecurityService;
+import com.openclassrooms.paymybuddy.service.UserService;
+import com.openclassrooms.paymybuddy.testconfig.SpringWebTestConfig;
+
+//@WebMvcTest tells Spring Boot to instantiate only the web layer and not the entire context
+@WebMvcTest(controllers = RegistrationController.class) 
+//Need to create a UserDetailsService in SpringSecurityWebTestConfig.class because @Service are not loaded by @WebMvcTest :
+@Import(SpringWebTestConfig.class)
+public class RegistrationControllerTest {
+	
+	@Autowired
+	private MockMvc mockMvc;
+	@MockBean
+	private UserService userServiceMock;
+	@MockBean
+	private SecurityService securityServiceMock;
+
+	
+	@Test
+	void GetRegistrationForm_shouldSucceed() throws Exception {
+		mockMvc.perform(get("/registration"))
+		.andExpect(status().is2xxSuccessful())
+		.andExpect(view().name("registration"))
+		.andExpect(model().size(1))
+		.andExpect(model().attributeExists("userForm"));
+	}
+
+	@Test
+	void PostRegistrationForm_shouldSucceedAndRedirected() throws Exception {
+		mockMvc.perform(post("/registration")
+				.param("firstname", "john")
+				.param("lastname", "doe")
+				.param("email", "johndoe@mail.com")
+				.param("password", "123")
+				.param("passwordconfirm", "123")
+				.param("bankaccountnumber", "1AX123456789")
+				.with(csrf()))
+		.andExpect(status().is3xxRedirection())
+		.andExpect(redirectedUrl("/"));
+	}
+
+	@Test
+	void PostRegistrationForm_shouldFailcause6FieldsEmpty() throws Exception {
+		mockMvc.perform(post("/registration")
+				.param("firstname", "")
+				.param("lastname", "")
+				.param("email", "")
+				.param("password", "")
+				.param("passwordconfirm", "")
+				.param("bankaccountnumber", "")
+				.with(csrf()))
+		.andExpect(model().attributeErrorCount("userForm", 6))
+		.andExpect(model().attributeHasFieldErrorCode("userForm", "firstname", "NotBlank")) 
+		.andExpect(status().isOk()); //registration page reloaded		
+	}
+
+	@Test
+	void PostRegistrationForm_shouldFailcauseDifferentPasswords() throws Exception {
+		mockMvc.perform(post("/registration")
+				.param("firstname", "john")
+				.param("lastname", "doe")
+				.param("email", "johndoe@mail.com")
+				.param("password", "123")
+				.param("passwordconfirm", "123456789")
+				.param("bankaccountnumber", "1AX123456789")
+				.with(csrf()))
+		.andExpect(model().attributeErrorCount("userForm", 1)) //error to display in registration page
+		.andExpect(status().isOk()); //registration page reloaded		
+	}
+
+	@Test
+	void PostRegistrationForm_shouldFailcausePasswordAlreadyExist() throws Exception {
+		//ARRANGE
+		when(userServiceMock.existsByEmail("johndoe@mail.com")).thenReturn(Boolean.TRUE);
+
+		//ACT+ASSERT
+		mockMvc.perform(post("/registration")
+				.param("firstname", "john")
+				.param("lastname", "doe")
+				.param("email", "johndoe@mail.com")
+				.param("password", "123")
+				.param("passwordconfirm", "123")
+				.param("bankaccountnumber", "1AX123456789")
+				.with(csrf()))
+		.andExpect(model().attributeErrorCount("userForm", 1)) //error to display in registration page
+		.andExpect(status().isOk()); //registration page reloaded		
+	}
+
+
+}

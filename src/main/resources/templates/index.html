@@ -27,51 +27,49 @@
 					<img src="/img/PayMyBuddy_Big.png" class="img-fluid"
 						alt="PayMyBuddy logo">
 					<h1 class="text-success motto">Welcome to Pay My Buddy&nbsp;!</h1>
-					<h3 class="text-primary">
-						We make moving your money easy&nbsp;!!!
-						</h1>
+					<h3 class="text-primary">We make moving your money easy&nbsp;!!!</h3>
 				</div>
 			</div>
 		</div>
 		<!-- CARDS -->
 		<div class="row">
 			<div class="col-12 col-md-6 col-lg-4">
-				<div class="card">
+				<div class="card h-100 bg-light">
 					<div class="card-body">
-						<h5 class="card-title">Devenez diplômé</h5>
-						<p class="card-text">De zéro à héros, obtenez un diplôme en
-							informatique.</p>
+						<img width="72" height="72" src="/img/24-7services.png" alt=”24/7services”>
+						<h5 class="card-title font-weight-bold">24/7 Services</h5>
+						<p class="card-text">Our services are available at any time
+							and every day of the year.</p>
 					</div>
 				</div>
 			</div>
 			<div class="col-12 col-md-6 col-lg-4">
-				<div class="card">
-					<div class="card-body">
-						<h5 class="card-title">Formateurs de qualités</h5>
-						<p class="card-text">Tous nos cours sont réalisés par les
-							meilleurs informaticiens.</p>
+				<div class="card h-100 bg-light">
+					<div class="card-body h-100">
+						<img width="72" height="72" src="/img/instantcashout.png"
+							alt=”Instantcashout”>
+						<h5 class="card-title font-weight-bold">Instant cashout</h5>
+						<p class="card-text">Cash out your available earnings directly
+							into your bank account whenever you want.</p>
 					</div>
 				</div>
 			</div>
 			<div class="col-12 col-md-6 col-lg-4">
-				<div class="card">
-					<div class="card-body">
-						<h5 class="card-title">Un travail graranti</h5>
-						<p class="card-text">Nous vous garantissons un emploi à
-							l'issue de votre formation.</p>
+				<div class="card h-100 bg-light">
+					<div class="card-body h-100">
+						<img width="72" height="72" src="/img/fullyencrypted.png"
+							alt=”FullyEncrypted”>
+						<h5 class="card-title font-weight-bold">Fully Encrypted</h5>
+						<p class="card-text">We're serious about security and use
+							cutting-edge technology to ensure your transactions are fully
+							encrypted.</p>
 					</div>
 				</div>
 			</div>
-
-
 		</div>
 
-
-		<div align="center">
-		<form th:action="@{/logout}" method="post">
-			<input type="submit" value="Logout" />
-		</form>
-	</div>
+		<!-- Footer -->
+		<div th:replace="fragments/general.html :: footer"></div>
 </body>
 
 

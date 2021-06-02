@@ -24,9 +24,12 @@ import org.springframework.web.context.WebApplicationContext;
  * @author jerome
  *
  */
+
+/*
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @AutoConfigureMockMvc
+*/
 class UserControllerTestIT {
 
 	@Autowired

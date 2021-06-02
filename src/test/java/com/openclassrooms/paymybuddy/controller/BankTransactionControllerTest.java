@@ -98,7 +98,8 @@ class BankTransactionControllerTest {
 		User user = new User(1L, "john", "doe", "johndoe@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),
 				"password1", "", true, "1AX256", new BigDecimal(50), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>() );
 		when(userServiceMock.getCurrentUser()).thenReturn(user);
-		doThrow(UserAmountException.class).when(userServiceMock).updateAmount(any(User.class),any(BigDecimal.class),any(Currency.class));
+		doThrow(new UserAmountException("InsufficientFunds", "This amount exceeds your account value."))
+			.when(userServiceMock).updateAmount(any(User.class),any(BigDecimal.class),any(Currency.class));
 		
 		mockMvc.perform(post("/banktransaction")
 				.param("amount", "1500")
@@ -217,6 +218,9 @@ class BankTransactionControllerTest {
 		User user = new User(1L, "john", "doe", "johndoe@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),
 				"password1", "", true, "1AX256", new BigDecimal(5000), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>() );
 		when(userServiceMock.getCurrentUser()).thenReturn(user);
+		doThrow(new UserAmountException("UserAmountExceedsMax", "The user amount exceeds Max value."))
+			.when(userServiceMock).updateAmount(any(User.class),any(BigDecimal.class),any(Currency.class));
+		
 		
 		mockMvc.perform(post("/banktransaction")
 				.param("amount", "99999999") 
