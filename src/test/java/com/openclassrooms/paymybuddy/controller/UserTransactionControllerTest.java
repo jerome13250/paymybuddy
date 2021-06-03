@@ -84,7 +84,7 @@ class UserTransactionControllerTest {
 		List<UserTransaction> userTransactions = Arrays.asList(userTransactionArray);
 		Page<UserTransaction> pagedUserTransaction = new PageImpl<UserTransaction>(userTransactions);
 		
-		Paging paging = Paging.of(1, 1, 5);
+		Paging paging = Paging.of(1, 1); //, 5);
 		paged = new Paged<UserTransaction>(pagedUserTransaction, paging);
 	
 	}

@@ -63,7 +63,7 @@ class ConnectionControllerTest {
 		List<User> users = Arrays.asList(userArray);
 		Page<User> pagedUser = new PageImpl<User>(users);
 		
-		Paging paging = Paging.of(1, 1, 5);
+		Paging paging = Paging.of(1, 1);//, 5);
 		paged = new Paged<User>(pagedUser, paging);
 	
 	}

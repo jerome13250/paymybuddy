@@ -5,6 +5,7 @@ import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -38,7 +39,7 @@ public class Paging {
 
     private boolean nextEnabled;
     private boolean prevEnabled;
-    private int pageSize;
+    //private int pageSize;
     private int pageNumber;
 
     private List<PageItem> items = new ArrayList<>();
@@ -47,8 +48,8 @@ public class Paging {
      * Create the PageItems from a specific start number to a specific end.
      * 
      * @param from the start number of PageItem to create
-     * @param to the end number of PageItem to create
-     * @param pageNumber the page that was required, this allows to show the correct activated PageItem
+     * @param to the end number of PageItem to create (EXCLUSIVE !)
+     * @param pageNumber the page that was required to display, this allows to deactivate the PageItem of the current page
      */
     public void addPageItems(int from, int to, int pageNumber) {
         for (int i = from; i < to; i++) {
@@ -60,8 +61,15 @@ public class Paging {
         }
     }
     
-
-    public void last(int pageSize) {
+    /**
+     * Creates 2 pageItems that represent the last pageItem when the current page is far from the end.
+     * <ol>
+     * 	<li>A pageItem with DOTS</li>
+     * 	<li>The last PageItem</li>
+     * 
+     * @param totalPages is used to create the link to the last page
+     */
+    public void last(int totalPages) {
         items.add(PageItem.builder()
                           .active(false)
                           .pageItemType(PageItemType.DOTS)
@@ -69,14 +77,14 @@ public class Paging {
 
         items.add(PageItem.builder()
                           .active(true)
-                          .index(pageSize)
+                          .index(totalPages)
                           .pageItemType(PageItemType.PAGE)
                           .build());
     }
 
     public void first(int pageNumber) {
         items.add(PageItem.builder()
-                          .active(pageNumber != 1)
+                          .active(true)
                           .index(1)
                           .pageItemType(PageItemType.PAGE)
                           .build());
@@ -87,9 +95,9 @@ public class Paging {
                           .build());
     }
 
-    public static Paging of(int totalPages, int pageNumber, int pageSize) {
+    public static Paging of(int totalPages, int pageNumber){    //, int pageSize) {
         Paging paging = new Paging();
-        paging.setPageSize(pageSize);
+        //paging.setPageSize(pageSize);
         paging.setNextEnabled(pageNumber != totalPages); //Next enabled if not on last page
         paging.setPrevEnabled(pageNumber != 1); //Prev enabled if not on 1st page
         paging.setPageNumber(pageNumber);
@@ -98,11 +106,11 @@ public class Paging {
         if (totalPages < PAGINATION_STEP * 2 + 6) {
             paging.addPageItems(1, totalPages + 1, pageNumber);
         //pageNumber around the beginning of pages so first pages will have links, next will have dots:
-        } else if (pageNumber < PAGINATION_STEP * 2 + 1) {
-            paging.addPageItems(1, PAGINATION_STEP * 2 + 4, pageNumber);
+        } else if (pageNumber < PAGINATION_STEP * 2 + 1) { //totalpages>12 and pageNumber<7
+            paging.addPageItems(1, PAGINATION_STEP * 2 + 4, pageNumber);//create pages until 10
             paging.last(totalPages);
         //pageNumber around the end of pages so first pages will have dots, last will have links:
-        } else if (pageNumber > totalPages - PAGINATION_STEP * 2) {
+        } else if (pageNumber > totalPages - PAGINATION_STEP * 2) { //totalpages>12 and pageNumber less than 6 from the end
             paging.first(pageNumber);
             paging.addPageItems(totalPages - PAGINATION_STEP * 2 - 2, totalPages + 1, pageNumber);
         //pageNumber is in the middle of pages, so first pages have dots, middle have links, last pages have dots.

@@ -45,7 +45,7 @@ public class BankTransactionServiceImpl implements BankTransactionService {
 		
 		PageRequest request = PageRequest.of(pageNumber - 1, size, Sort.by(Sort.Direction.DESC, "id"));
         Page<BankTransaction> page = bankTransactionRepository.findBankTransactionByUserId(userService.getCurrentUser().getId(),request);
-        return new Paged<>(page, Paging.of(page.getTotalPages(), pageNumber, size));
+        return new Paged<>(page, Paging.of(page.getTotalPages(), pageNumber));//, size));
 		
 	}
 	

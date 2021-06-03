@@ -50,6 +50,6 @@ public class UserTransactionServiceImpl implements UserTransactionService {
 		
 		PageRequest request = PageRequest.of(pageNumber - 1, size, Sort.by(Sort.Direction.DESC, "id"));
         Page<UserTransaction> page = userTransactionRepository.findUserTransactionByUserId(userService.getCurrentUser().getId(),request);
-        return new Paged<>(page, Paging.of(page.getTotalPages(), pageNumber, size));
+        return new Paged<>(page, Paging.of(page.getTotalPages(), pageNumber));//, size));
 	}
 }

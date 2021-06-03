@@ -79,7 +79,7 @@ class BankTransactionControllerTest {
 		List<BankTransaction> bankTransactions = Arrays.asList(bankTransactionArray);
 		Page<BankTransaction> pagedBankTransaction = new PageImpl<BankTransaction>(bankTransactions);
 		
-		Paging paging = Paging.of(1, 1, 5);
+		Paging paging = Paging.of(1, 1);//, 5);
 		paged = new Paged<BankTransaction>(pagedBankTransaction, paging);
 	
 	}
