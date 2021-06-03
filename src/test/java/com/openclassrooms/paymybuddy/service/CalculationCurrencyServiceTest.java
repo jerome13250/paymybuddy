@@ -9,6 +9,8 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
+import com.openclassrooms.paymybuddy.service.impl.CalculationCurrencyService;
+
 class CalculationCurrencyServiceTest {
 
 	@Test

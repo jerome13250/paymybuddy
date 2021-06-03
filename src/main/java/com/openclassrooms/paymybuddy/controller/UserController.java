@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.openclassrooms.paymybuddy.model.User;
-import com.openclassrooms.paymybuddy.service.SecurityService;
-import com.openclassrooms.paymybuddy.service.UserService;
+import com.openclassrooms.paymybuddy.service.interfaces.SecurityService;
+import com.openclassrooms.paymybuddy.service.interfaces.UserService;
 
 @Controller
 public class UserController {

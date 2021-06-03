@@ -16,8 +16,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.openclassrooms.paymybuddy.service.SecurityService;
-import com.openclassrooms.paymybuddy.service.UserService;
+import com.openclassrooms.paymybuddy.service.interfaces.SecurityService;
+import com.openclassrooms.paymybuddy.service.interfaces.UserService;
 import com.openclassrooms.paymybuddy.testconfig.SpringWebTestConfig;
 
 //@WebMvcTest tells Spring Boot to instantiate only the web layer and not the entire context

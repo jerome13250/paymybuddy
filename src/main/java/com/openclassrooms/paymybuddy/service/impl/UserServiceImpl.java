@@ -1,4 +1,4 @@
-package com.openclassrooms.paymybuddy.service;
+package com.openclassrooms.paymybuddy.service.impl;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -19,6 +19,8 @@ import com.openclassrooms.paymybuddy.model.Role;
 import com.openclassrooms.paymybuddy.model.User;
 import com.openclassrooms.paymybuddy.repositories.RoleRepository;
 import com.openclassrooms.paymybuddy.repositories.UserRepository;
+import com.openclassrooms.paymybuddy.service.interfaces.SecurityService;
+import com.openclassrooms.paymybuddy.service.interfaces.UserService;
 import com.openclassrooms.paymybuddy.utils.paging.Paged;
 import com.openclassrooms.paymybuddy.utils.paging.Paging;
 

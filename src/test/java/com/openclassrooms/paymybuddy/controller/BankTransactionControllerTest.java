@@ -33,8 +33,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.openclassrooms.paymybuddy.exceptions.UserAmountException;
 import com.openclassrooms.paymybuddy.model.BankTransaction;
 import com.openclassrooms.paymybuddy.model.User;
-import com.openclassrooms.paymybuddy.service.BankTransactionService;
-import com.openclassrooms.paymybuddy.service.UserService;
+import com.openclassrooms.paymybuddy.service.interfaces.BankTransactionService;
+import com.openclassrooms.paymybuddy.service.interfaces.UserService;
 import com.openclassrooms.paymybuddy.testconfig.SpringWebTestConfig;
 import com.openclassrooms.paymybuddy.utils.paging.Paged;
 import com.openclassrooms.paymybuddy.utils.paging.Paging;
@@ -61,6 +61,7 @@ class BankTransactionControllerTest {
 	@MockBean
 	private BankTransactionService bankTransactionServiceMock;
 	
+	User user1;
 	BankTransaction bankTransaction1;
 	BankTransaction bankTransaction2;
 	BankTransaction bankTransaction3;
@@ -68,8 +69,8 @@ class BankTransactionControllerTest {
 	
 	@BeforeEach
 	void setup() {
-		User user1 = new User(1L, "firstname1", "lastname1", "user1e@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),
-				"password1", "", true, "1AX256", new BigDecimal(100), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>() );
+		user1 = new User(1L, "firstname1", "lastname1", "user1e@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),"password1", "", true, "1AX256",
+				new BigDecimal(100), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>() );
 		bankTransaction1 = new BankTransaction(1L, user1, "12345", LocalDateTime.of(2025, 01, 01, 00, 45), new BigDecimal("100.10"),Currency.getInstance("EUR"));
 		bankTransaction2 = new BankTransaction(2L, user1, "12345", LocalDateTime.of(2025, 01, 01, 00, 45), new BigDecimal("200.20"),Currency.getInstance("USD"));
 		bankTransaction3 = new BankTransaction(3L, user1, "12345", LocalDateTime.of(2025, 01, 01, 00, 45), new BigDecimal("300.30"),Currency.getInstance("GBP"));
@@ -88,9 +89,7 @@ class BankTransactionControllerTest {
 	@Test
 	void GetBankTransaction_shouldSucceed() throws Exception {
 		//ARRANGE
-		User user = new User(1L, "john", "doe", "johndoe@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),
-				"password1", "", true, "1AX256", new BigDecimal(200), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>() );
-		when(userServiceMock.getCurrentUser()).thenReturn(user);
+		when(userServiceMock.getCurrentUser()).thenReturn(user1);
 		when(bankTransactionServiceMock.getCurrentUserBankTransactionPage(1, 5)).thenReturn(paged); //display list of banktransactions
 		
 		//ACT+ASSERT
@@ -107,10 +106,8 @@ class BankTransactionControllerTest {
 	@WithUserDetails("user@company.com") //user from SpringSecurityWebTestConfig.class
 	@Test
 	void PostBankTransaction_SendMoneyShouldSucceedAndRedirected() throws Exception {
-		
-		User user = new User(1L, "john", "doe", "johndoe@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),
-				"password1", "", true, "1AX256", new BigDecimal(10000), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>() );
-		when(userServiceMock.getCurrentUser()).thenReturn(user);
+		//ARRANGE
+		when(userServiceMock.getCurrentUser()).thenReturn(user1);
 		
 		mockMvc.perform(post("/banktransaction")
 				.param("amount", "1500")
@@ -125,10 +122,8 @@ class BankTransactionControllerTest {
 	@WithUserDetails("user@company.com") //user from SpringSecurityWebTestConfig.class
 	@Test
 	void PostBankTransaction_SendMoneyShouldFail_InsufficientFund() throws Exception {
-		
-		User user = new User(1L, "john", "doe", "johndoe@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),
-				"password1", "", true, "1AX256", new BigDecimal(50), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>() );
-		when(userServiceMock.getCurrentUser()).thenReturn(user);
+		//ARRANGE
+		when(userServiceMock.getCurrentUser()).thenReturn(user1);
 		when(bankTransactionServiceMock.getCurrentUserBankTransactionPage(1, 5)).thenReturn(paged); //display list of banktransactions
 		doThrow(new UserAmountException("InsufficientFunds", "This amount exceeds your account value."))
 			.when(userServiceMock).updateAmount(any(User.class),any(BigDecimal.class),any(Currency.class));
@@ -149,10 +144,8 @@ class BankTransactionControllerTest {
 	@WithUserDetails("user@company.com") //user from SpringSecurityWebTestConfig.class
 	@Test
 	void PostBankTransaction_SendMoneyShouldFail_UnknownCurrency() throws Exception {
-		
-		User user = new User(1L, "john", "doe", "johndoe@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),
-				"password1", "", true, "1AX256", new BigDecimal(10000), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>() );
-		when(userServiceMock.getCurrentUser()).thenReturn(user);
+		//ARRANGE
+		when(userServiceMock.getCurrentUser()).thenReturn(user1);
 		when(bankTransactionServiceMock.getCurrentUserBankTransactionPage(1, 5)).thenReturn(paged); //display list of banktransactions
 		
 		mockMvc.perform(post("/banktransaction")
@@ -170,10 +163,8 @@ class BankTransactionControllerTest {
 	@WithUserDetails("user@company.com") //user from SpringSecurityWebTestConfig.class
 	@Test
 	void PostBankTransaction_GetMoneyShouldSucceedAndRedirected() throws Exception {
-		
-		User user = new User(1L, "john", "doe", "johndoe@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),
-				"password1", "", true, "1AX256", new BigDecimal(10000), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>() );
-		when(userServiceMock.getCurrentUser()).thenReturn(user);
+		//ARRANGE
+		when(userServiceMock.getCurrentUser()).thenReturn(user1);
 		when(bankTransactionServiceMock.getCurrentUserBankTransactionPage(1, 5)).thenReturn(paged); //display list of banktransactions
 		
 		mockMvc.perform(post("/banktransaction")
@@ -189,10 +180,8 @@ class BankTransactionControllerTest {
 	@WithUserDetails("user@company.com")
 	@Test
 	void PostBankTransaction_GetMoneyShouldFail_MissingAmount() throws Exception {
-		
-		User user = new User(1L, "john", "doe", "johndoe@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),
-				"password1", "", true, "1AX256", new BigDecimal(10000), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>() );
-		when(userServiceMock.getCurrentUser()).thenReturn(user);
+		//ARRANGE
+		when(userServiceMock.getCurrentUser()).thenReturn(user1);
 		when(bankTransactionServiceMock.getCurrentUserBankTransactionPage(1, 5)).thenReturn(paged); //display list of banktransactions
 		
 		mockMvc.perform(post("/banktransaction")
@@ -210,10 +199,8 @@ class BankTransactionControllerTest {
 	@WithUserDetails("user@company.com")
 	@Test
 	void PostBankTransaction_GetMoneyShouldFail_MissingCurrency() throws Exception {
-		
-		User user = new User(1L, "john", "doe", "johndoe@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),
-				"password1", "", true, "1AX256", new BigDecimal(10000), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>() );
-		when(userServiceMock.getCurrentUser()).thenReturn(user);
+		//ARRANGE
+		when(userServiceMock.getCurrentUser()).thenReturn(user1);
 		when(bankTransactionServiceMock.getCurrentUserBankTransactionPage(1, 5)).thenReturn(paged); //display list of banktransactions
 		
 		mockMvc.perform(post("/banktransaction")
@@ -231,10 +218,8 @@ class BankTransactionControllerTest {
 	@WithUserDetails("user@company.com")
 	@Test
 	void PostBankTransaction_GetMoneyShouldFail_MissingParamGetOrSend() throws Exception {
-		
-		User user = new User(1L, "john", "doe", "johndoe@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),
-				"password1", "", true, "1AX256", new BigDecimal(10000), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>() );
-		when(userServiceMock.getCurrentUser()).thenReturn(user);
+		//ARRANGE
+		when(userServiceMock.getCurrentUser()).thenReturn(user1);
 		when(bankTransactionServiceMock.getCurrentUserBankTransactionPage(1, 5)).thenReturn(paged); //display list of banktransactions
 		
 		mockMvc.perform(post("/banktransaction")
@@ -252,10 +237,8 @@ class BankTransactionControllerTest {
 	@WithUserDetails("user@company.com")
 	@Test
 	void PostBankTransaction_GetMoneyShouldFail_UserAmountExceedsMySQLField() throws Exception {
-		
-		User user = new User(1L, "john", "doe", "johndoe@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),
-				"password1", "", true, "1AX256", new BigDecimal(5000), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>() );
-		when(userServiceMock.getCurrentUser()).thenReturn(user);
+		//ARRANGE
+		when(userServiceMock.getCurrentUser()).thenReturn(user1);
 		when(bankTransactionServiceMock.getCurrentUserBankTransactionPage(1, 5)).thenReturn(paged); //display list of banktransactions
 		doThrow(new UserAmountException("UserAmountExceedsMax", "The user amount exceeds Max value."))
 			.when(userServiceMock).updateAmount(any(User.class),any(BigDecimal.class),any(Currency.class));

@@ -1,35 +1,36 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta charset="utf-8">
-	<title>Bank Transaction</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <link rel="stylesheet"
+<meta charset="utf-8">
+<title>User Transaction</title>
+<link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
 	integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
 	crossorigin="anonymous">
-	<link href="/css/main.css" rel="stylesheet">
+<link href="/css/main.css" rel="stylesheet">
 </head>
 
 <body>
 	<!-- Navigation -->
 	<div th:replace="fragments/general.html :: navigation"></div>
-
+	
+	<!-- FORM : Transaction between users -->
 	<div class="container">
-		<form method="POST" th:object="${banktransactionFormDTO}"
-			th:action="@{/banktransaction}">
+		<form method="POST" th:object="${usertransactionFormDTO}"
+			th:action="@{/usertransaction}">
 			<div class="form-row my-3">
 				<div class="col-12 col-md-6 col-lg-4 h5">
-					<div class="btn-group btn-group-toggle" data-toggle="buttons">
-						<label class="btn btn-secondary active"> <input
-							type="radio" th:field="*{getOrSendRadioOptions}" id="option1"
-							autocomplete="off" value="get"> Get Money from your Bank
-						</label> <label class="btn btn-secondary"> <input type="radio"
-							th:field="*{getOrSendRadioOptions}" id="option2"
-							autocomplete="off" value="send"> Send Money to your Bank
-						</label>
-					</div>
+					<select th:field="*{userDestination}" class="form-control">
+						<option th:value="0" text="Please select buddy"></option>
+						<option
+							th:each="entry : ${user.getConnections()}"
+							th:value="${entry.getId}" 
+							th:text="${entry.getEmail()}">
+						</option>
+					</select> 
+					<span class="has-error" th:if="${#fields.hasErrors('userDestination')}"
+						th:errors="*{userDestination}">
+					</span>
 				</div>
 				<div class="col-12 col-md-6 col-lg-8 h5 text-right">
 					<div
@@ -50,7 +51,8 @@
 							th:each="entry : ${@currenciesAllowed.getCurrenciesAllowedList()}"
 							th:value="${entry}" th:text="${entry.getDisplayName()}">
 						</option>
-					</select> <span class="has-error" th:if="${#fields.hasErrors('currency')}"
+					</select> 
+					<span class="has-error" th:if="${#fields.hasErrors('currency')}"
 						th:errors="*{currency}"></span>
 				</div>
 				<div class="col-12 col-md-4 col-lg-3">
@@ -65,17 +67,19 @@
 		<table class="table">
 			<thead class="thead-light">
 				<tr>
-					<th class="text-left">Bank Account</th>
+					<th class="text-left">Buddy</th>
 					<th class="text-left">Date</th>
 					<th class="text-left">value</th>
+					<th class="text-left">Fees</th>
 					<th class="text-left">Currency</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr th:each="page : ${paged.page}">
-					<td th:text="${page.bankaccountnumber}"></td>
+					<td th:text="${page.userDestination.email}"></td>
 					<td th:text="${page.datetime}"></td>
 					<td th:text="${page.amount}"></td>
+					<td th:text="${page.fees}"></td>
 					<td th:text="${page.currency}"></td>
 				</tr>
 			</tbody>

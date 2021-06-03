@@ -29,7 +29,7 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.openclassrooms.paymybuddy.model.User;
-import com.openclassrooms.paymybuddy.service.UserService;
+import com.openclassrooms.paymybuddy.service.interfaces.UserService;
 import com.openclassrooms.paymybuddy.testconfig.SpringWebTestConfig;
 import com.openclassrooms.paymybuddy.utils.paging.Paged;
 import com.openclassrooms.paymybuddy.utils.paging.Paging;
@@ -52,12 +52,12 @@ class ConnectionControllerTest {
 	
 	@BeforeEach
 	void setup() {
-		user1 = new User(1L, "firstname1", "lastname1", "user1e@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),
-				"password1", "", true, "1AX256", new BigDecimal(100), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>() );
-		user2 = new User(2L, "firstname2", "lastname2", "user2e@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),
-				"password2", "", true, "1AX256", new BigDecimal(200), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>() );
-		user3 = new User(3L, "firstname3", "lastname3", "user3e@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),
-				"password3", "", true, "1AX256", new BigDecimal(300), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>() );
+		user1 = new User(1L, "firstname1", "lastname1", "user1e@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),"password1", "", true, "1AX256",
+				new BigDecimal(100), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>() );
+		user2 = new User(2L, "firstname2", "lastname2", "user2e@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),"password2", "", true, "1AX256",
+				new BigDecimal(200), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>() );
+		user3 = new User(3L, "firstname3", "lastname3", "user3e@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),"password3", "", true, "1AX256",
+				new BigDecimal(300), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>() );
 	
 		User[] userArray = {user1,user2,user3};
 		List<User> users = Arrays.asList(userArray);
@@ -87,14 +87,9 @@ class ConnectionControllerTest {
 	@Test
 	void PostConnectionPage_shouldSucceed() throws Exception {
 		//ARRANGE:
-		User user = new User(1L, "john", "doe", "johndoe@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),
-				"password1", "", true, "1AX256", new BigDecimal(200), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>() );
-		User newConnection = new User(2L, "michael", "stone", "michaelstone@mail.com", LocalDateTime.of(2030, 01, 25, 00, 45),
-				"password2", "", true, "12HGJ44", new BigDecimal(500), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>() );		
-		
-		when(userServiceMock.getCurrentUser()).thenReturn(user);
+		when(userServiceMock.getCurrentUser()).thenReturn(user1);
 		when(userServiceMock.existsByEmail("michaelstone@mail.com")).thenReturn(true);
-		when(userServiceMock.findByEmail("michaelstone@mail.com")).thenReturn(newConnection);
+		when(userServiceMock.findByEmail("michaelstone@mail.com")).thenReturn(user2);
 		when(userServiceMock.getCurrentUserConnectionPage(1, 5)).thenReturn(paged); //display list of connections
 		
 		mockMvc.perform(post("/connection")
@@ -106,25 +101,20 @@ class ConnectionControllerTest {
 		.andExpect(model().attributeExists("paged"))
 		.andExpect(model().attribute("paged", paged));
 		
-		assertTrue(user.getConnections().contains(newConnection));
+		assertTrue(user1.getConnections().contains(user2));
 	}
 	
 	@WithUserDetails("user@company.com") //user from SpringSecurityWebTestConfig.class
 	@Test
 	void PostConnectionPage_shouldFail_connectionUnknown() throws Exception {
 		//ARRANGE:
-		User user = new User(1L, "john", "doe", "johndoe@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),
-				"password1", "", true, "1AX256", new BigDecimal(200), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>() );
-		User newConnection = new User(2L, "michael", "stone", "michaelstone@mail.com", LocalDateTime.of(2030, 01, 25, 00, 45),
-				"password2", "", true, "12HGJ44", new BigDecimal(500), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>() );		
-
-		when(userServiceMock.getCurrentUser()).thenReturn(user);
-		when(userServiceMock.existsByEmail("michaelstone@mail.com")).thenReturn(false);//check connection exists in DB
+		when(userServiceMock.getCurrentUser()).thenReturn(user1);//user1 is current connected user
+		when(userServiceMock.existsByEmail(user2.getEmail())).thenReturn(false);//check user2 new connection exists in DB
 		when(userServiceMock.getCurrentUserConnectionPage(1, 5)).thenReturn(paged); //display list of connections
 		
 		//ACT+ASSERT:
 		mockMvc.perform(post("/connection")
-				.param("email", "michaelstone@mail.com")
+				.param("email", user2.getEmail()) //try to add user2 as new connection
 				.with(csrf()))
 		.andExpect(status().is2xxSuccessful())
 		.andExpect(view().name("connection"))
@@ -135,22 +125,20 @@ class ConnectionControllerTest {
 		.andExpect(model().attribute("error", "Email Unknown"))
 		;
 		
-		assertFalse(user.getConnections().contains(newConnection));
+		assertFalse(user1.getConnections().contains(user2));
 	}
 	
 	@WithUserDetails("user@company.com") //user from SpringSecurityWebTestConfig.class
 	@Test
 	void PostConnectionPage_shouldFail_connectionToHimself() throws Exception {
 		//ARRANGE:
-		User user = new User(1L, "john", "doe", "johndoe@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),
-				"password1", "", true, "1AX256", new BigDecimal(200), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>() );
-		when(userServiceMock.getCurrentUser()).thenReturn(user);
-		when(userServiceMock.existsByEmail("johndoe@mail.com")).thenReturn(true); //check connection to himself
+		when(userServiceMock.getCurrentUser()).thenReturn(user1);//user1 is current connected user
+		when(userServiceMock.existsByEmail(user1.getEmail())).thenReturn(true); //check user1 new connection exists in DB
 		when(userServiceMock.getCurrentUserConnectionPage(1, 5)).thenReturn(paged); //display list of connections
 		
 		//ACT+ASSERT:
 		mockMvc.perform(post("/connection")
-				.param("email", "johndoe@mail.com")
+				.param("email", user1.getEmail())
 				.with(csrf()))
 		.andExpect(status().is2xxSuccessful())
 		.andExpect(view().name("connection"))
@@ -161,30 +149,28 @@ class ConnectionControllerTest {
 		.andExpect(model().attribute("error", "You can't add yourself as a connection"))
 		;
 		
-		assertFalse(user.getConnections().contains(user));
+		assertFalse(user1.getConnections().contains(user1));
 	}
 	
 	@WithUserDetails("user@company.com") //user from SpringSecurityWebTestConfig.class
 	@Test
 	void PostConnectionDeletePage_shouldSucceed() throws Exception {
 		//ARRANGE:
-		User user = new User(1000L, "john", "doe", "johndoe@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),
-				"password1", "", true, "1AX256", new BigDecimal(200), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>() );
-		user.getConnections().add(user1);
-		user.getConnections().add(user2);
-		when(userServiceMock.getCurrentUser()).thenReturn(user);
+		user1.getConnections().add(user2);
+		user1.getConnections().add(user3);
+		when(userServiceMock.getCurrentUser()).thenReturn(user1);
 		
 		//ACT+ASSERT:
 		mockMvc.perform(post("/connectionDelete")
-				.param("id", "1")
+				.param("id", "2")
 				.with(csrf()))
 		.andExpect(status().is3xxRedirection())
 		.andExpect(view().name("redirect:/connection"))
 		.andExpect(model().size(0))
 		;
 		
-		assertFalse(user.getConnections().contains(user1));
-		assertTrue(user.getConnections().contains(user2));
+		assertFalse(user1.getConnections().contains(user2));
+		assertTrue(user1.getConnections().contains(user3));
 	}
 
 	

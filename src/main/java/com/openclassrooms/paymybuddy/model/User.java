@@ -3,7 +3,9 @@ package com.openclassrooms.paymybuddy.model;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Currency;
+import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -37,7 +39,7 @@ import lombok.ToString;
 @Entity
 @Table(name = "user")
 @PasswordEquality
-public class User{
+public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -76,9 +78,15 @@ public class User{
 			inverseJoinColumns = @JoinColumn(name = "connection_id"))
 	private Set<User> connections;
 	
-	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY,
+	@OneToMany(mappedBy = "user", //mappedBy indicates the entity BankTransaction owns the relationship
+			fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
     private Set<BankTransaction> banktransactions;
 	
+	@OneToMany(mappedBy = "userSource", //mappedBy indicates the entity UserTransaction owns the relationship
+			fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    private Set<UserTransaction> usertransactions;
+
 
 }

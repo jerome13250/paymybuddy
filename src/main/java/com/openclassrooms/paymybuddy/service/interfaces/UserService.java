@@ -1,4 +1,4 @@
-package com.openclassrooms.paymybuddy.service;
+package com.openclassrooms.paymybuddy.service.interfaces;
 
 import java.math.BigDecimal;
 import java.util.Currency;

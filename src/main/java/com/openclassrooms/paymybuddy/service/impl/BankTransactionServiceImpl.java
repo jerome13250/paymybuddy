@@ -1,4 +1,4 @@
-package com.openclassrooms.paymybuddy.service;
+package com.openclassrooms.paymybuddy.service.impl;
 
 import java.time.LocalDateTime;
 
@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import com.openclassrooms.paymybuddy.model.BankTransaction;
 import com.openclassrooms.paymybuddy.model.User;
 import com.openclassrooms.paymybuddy.repositories.BankTransactionRepository;
+import com.openclassrooms.paymybuddy.service.interfaces.BankTransactionService;
+import com.openclassrooms.paymybuddy.service.interfaces.UserService;
 import com.openclassrooms.paymybuddy.utils.paging.Paged;
 import com.openclassrooms.paymybuddy.utils.paging.Paging;
 
