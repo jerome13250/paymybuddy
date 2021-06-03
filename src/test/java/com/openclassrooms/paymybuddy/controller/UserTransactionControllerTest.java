@@ -117,9 +117,9 @@ class UserTransactionControllerTest {
 		
 		//ACT+ASSERT:
 		mockMvc.perform(post("/usertransaction")
-				.param("amount", "1500")
+				.param("amount", "1000")
 				.param("currency", "USD")
-				.param("userDestination","1") //THIS CREATES BUG !
+				.param("userDestination","53") //THIS CREATES BUG !
 				.with(csrf()))
 		.andExpect(status().is3xxRedirection()) //go to usertransaction page
 		.andExpect(redirectedUrl("/usertransaction"))
