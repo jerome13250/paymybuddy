@@ -17,7 +17,7 @@ import com.openclassrooms.paymybuddy.model.User;
 import com.openclassrooms.paymybuddy.service.interfaces.SecurityService;
 import com.openclassrooms.paymybuddy.service.interfaces.UserService;
 
-@Controller
+//@Controller Desactivation pour retrouver le probleme de unit test sans JPA
 public class UserController {
 	
 	Logger logger = LoggerFactory.getLogger(UserController.class);

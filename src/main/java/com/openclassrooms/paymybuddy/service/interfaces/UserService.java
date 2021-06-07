@@ -11,6 +11,7 @@ public interface UserService {
     void create(User user);
     void update(User user);
     User findByEmail(String email);
+    User findById(Long id);
     Boolean existsByEmail(String email);
     User getCurrentUser();
     void updateAmount(User user, BigDecimal amount, Currency currency) throws UserAmountException;

@@ -1,9 +1,9 @@
 package com.openclassrooms.paymybuddy.service.impl;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.Currency;
 import java.util.HashSet;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +39,8 @@ public class UserServiceImpl implements UserService {
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	@Autowired
 	private CalculationCurrencyService calculationCurrencyService;
+	@Autowired
+	private LocalDateTimeService localDateTimeService;
 
 	@Override
 	public void create(User user) {
@@ -49,7 +51,7 @@ public class UserServiceImpl implements UserService {
 		//https://stackoverflow.com/questions/12566298/hibernate-bean-validation-issue :
 		user.setPasswordconfirm(encryptedPassword);
 		user.setEnabled(true); //by default new user is enabled
-		user.setInscriptiondatetime(LocalDateTime.now()); //time of user creation
+		user.setInscriptiondatetime(localDateTimeService.now()); //time of user creation
 		user.setAmount(new BigDecimal(0));
 		
 		//Create the role for user, by default always create a USER role, not ADMIN...
@@ -86,10 +88,10 @@ public class UserServiceImpl implements UserService {
 	public void updateAmount(User user, BigDecimal amount, Currency currency) throws UserAmountException { 
 		
 		BigDecimal result = calculationCurrencyService.sumCurrencies(user.getAmount(), user.getCurrency(), amount, currency);
-		if (result.compareTo(new BigDecimal(0))==-1) {
+		if (result.compareTo(new BigDecimal(0))<0) {
 			throw new UserAmountException("InsufficientFunds", "This amount exceeds your account value.");
 		}
-		if (result.compareTo(new BigDecimal(9999999))==1) {
+		if (result.compareTo(new BigDecimal(9999999))>0) {
 			throw new UserAmountException("UserAmountExceedsMax", "The user amount exceeds Max value.");
 		}
 		
@@ -102,8 +104,14 @@ public class UserServiceImpl implements UserService {
 	public Paged<User> getCurrentUserConnectionPage(int pageNumber, int size) {
         PageRequest request = PageRequest.of(pageNumber - 1, size, Sort.by(Sort.Direction.DESC, "id"));
         Page<User> page = userRepository.findConnectionById(getCurrentUser().getId(),request);
-        return new Paged<>(page, Paging.of(page.getTotalPages(), pageNumber));//, size));
+        return new Paged<>(page, Paging.of(page.getTotalPages(), pageNumber));
     }
+
+	@Override
+	public User findById(Long id) {
+		Optional<User> optuser = userRepository.findById(id);
+		return optuser.isEmpty()? null : optuser.get();
+	}
 	
 	
 	

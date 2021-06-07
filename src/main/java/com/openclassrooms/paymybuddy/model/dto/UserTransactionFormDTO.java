@@ -18,6 +18,7 @@ import lombok.Setter;
 @Setter
 public class UserTransactionFormDTO {
 	
+	//validation is done in UserTransactionController
 	private User userDestination;
 	
 	@NotNull

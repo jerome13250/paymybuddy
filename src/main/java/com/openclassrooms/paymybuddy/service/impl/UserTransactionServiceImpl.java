@@ -48,8 +48,8 @@ public class UserTransactionServiceImpl implements UserTransactionService {
 	@Override
 	public Paged<UserTransaction> getCurrentUserUserTransactionPage(int pageNumber, int size) {
 		
-		PageRequest request = PageRequest.of(pageNumber - 1, size, Sort.by(Sort.Direction.DESC, "id"));
+		PageRequest request = PageRequest.of(pageNumber - 1, size, Sort.by(Sort.Direction.DESC, "id"));//TODO: Sort by date 
         Page<UserTransaction> page = userTransactionRepository.findUserTransactionByUserId(userService.getCurrentUser().getId(),request);
-        return new Paged<>(page, Paging.of(page.getTotalPages(), pageNumber));//, size));
+        return new Paged<>(page, Paging.of(page.getTotalPages(), pageNumber));
 	}
 }

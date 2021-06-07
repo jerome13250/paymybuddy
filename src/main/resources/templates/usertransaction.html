@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="utf-8">
-<title>User Transaction</title>
-<link rel="stylesheet"
+	<title>Buddy Transaction</title>
+	
+	<meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
 	integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
 	crossorigin="anonymous">
-<link href="/css/main.css" rel="stylesheet">
+	<link href="/css/main.css" rel="stylesheet">
 </head>
 
 <body>
@@ -19,9 +21,9 @@
 		<form method="POST" th:object="${usertransactionFormDTO}"
 			th:action="@{/usertransaction}">
 			<div class="form-row my-3">
-				<div class="col-12 col-md-6 col-lg-4 h5">
+				<div class="col-12 col-md-6 col-lg-4">
 					<select th:field="*{userDestination}" class="form-control">
-						<option th:value="0" text="Please select buddy"></option>
+						<option value="0">--- Please select buddy ---</option>
 						<option
 							th:each="entry : ${user.getConnections()}"
 							th:value="${entry.getId}" 

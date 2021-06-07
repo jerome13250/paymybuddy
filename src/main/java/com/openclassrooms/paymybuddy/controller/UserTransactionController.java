@@ -73,6 +73,12 @@ public class UserTransactionController {
             return "usertransaction";
         }
     	
+    	//Check userDestination belongs to buddies list:
+        if ( !connectedUser.getConnections().contains(userTransactionFormDTO.getUserDestination()) ) {
+        	bindingResult.rejectValue("userDestination", "userDestinationNotABuddy", "Please select a buddy !");
+        	return "usertransaction";
+        }
+    	
     	//UnknownCurrency
         if ( !currenciesAllowed.getCurrenciesAllowedList().contains(userTransactionFormDTO.getCurrency()) ) {
         	bindingResult.rejectValue("currency", "UnknownCurrency", "This currency is not allowed.");
@@ -99,20 +105,7 @@ public class UserTransactionController {
         return "redirect:/usertransaction";
     }
     
-    /**
-     * This method converts an Entity object to a DTO
-     * 
-     * @param userTransaction
-     * @return DTO version
-     * 
-     * @see <a href="https://www.baeldung.com/entity-to-and-from-dto-for-a-java-spring-application"> Entity/DTO conversion
-     */
-/*    private UserTransactionFormDTO convertToDto(UserTransaction userTransaction) {
-    	UserTransactionFormDTO userTransactionFormDTO = modelMapper.map(userTransaction, UserTransactionFormDTO.class);
-        return userTransactionFormDTO;
-    }
-*/
-    
+  
     /**
      * This method converts a DTO object to an Entity
      * 

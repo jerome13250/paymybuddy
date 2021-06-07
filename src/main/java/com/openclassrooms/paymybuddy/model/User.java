@@ -3,6 +3,7 @@ package com.openclassrooms.paymybuddy.model;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Currency;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -26,6 +27,7 @@ import javax.validation.constraints.NotBlank;
 import com.openclassrooms.paymybuddy.validation.PasswordEquality;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
