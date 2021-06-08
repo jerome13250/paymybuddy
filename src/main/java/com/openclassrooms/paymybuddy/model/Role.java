@@ -19,7 +19,7 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@ToString
+//@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode  //used for equals unit test in User

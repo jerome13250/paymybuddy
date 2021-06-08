@@ -126,7 +126,7 @@ class BankTransactionControllerTest {
 		when(userServiceMock.getCurrentUser()).thenReturn(user1);
 		when(bankTransactionServiceMock.getCurrentUserBankTransactionPage(1, 5)).thenReturn(paged); //display list of banktransactions
 		doThrow(new UserAmountException("InsufficientFunds", "This amount exceeds your account value."))
-			.when(userServiceMock).updateAmount(any(User.class),any(BigDecimal.class),any(Currency.class));
+			.when(userServiceMock).bankTransactionUpdateAmount(any(User.class),any(BigDecimal.class),any(Currency.class));
 		
 		mockMvc.perform(post("/banktransaction")
 				.param("amount", "1500")
@@ -241,7 +241,7 @@ class BankTransactionControllerTest {
 		when(userServiceMock.getCurrentUser()).thenReturn(user1);
 		when(bankTransactionServiceMock.getCurrentUserBankTransactionPage(1, 5)).thenReturn(paged); //display list of banktransactions
 		doThrow(new UserAmountException("UserAmountExceedsMax", "The user amount exceeds Max value."))
-			.when(userServiceMock).updateAmount(any(User.class),any(BigDecimal.class),any(Currency.class));
+			.when(userServiceMock).bankTransactionUpdateAmount(any(User.class),any(BigDecimal.class),any(Currency.class));
 		
 		
 		mockMvc.perform(post("/banktransaction")

@@ -81,10 +81,10 @@ public class BankTransactionController {
     	
         BankTransaction bankTransaction = convertToEntity(bankTransactionFormDTO);
         
-    	
+
         //update user amount:
         try {
-			userService.updateAmount(connectedUser, bankTransaction.getAmount(), bankTransaction.getCurrency());
+			userService.bankTransactionUpdateAmount(connectedUser, bankTransaction.getAmount(), bankTransaction.getCurrency());
 		} catch (UserAmountException e) {
 			logger.debug("UserAmountException");
 			bindingResult.rejectValue("amount", e.getErrorCode(), e.getDefaultMessage());
@@ -98,19 +98,6 @@ public class BankTransactionController {
         return "redirect:/banktransaction";
     }
     
-    /**
-     * This method converts an Entity object to a DTO
-     * 
-     * @param bankTransaction
-     * @return DTO version
-     * 
-     * @see <a href="https://www.baeldung.com/entity-to-and-from-dto-for-a-java-spring-application"> Entity/DTO conversion
-     */
-/*    private BankTransactionFormDTO convertToDto(BankTransaction bankTransaction) {
-    	BankTransactionFormDTO bankTransactionFormDTO = modelMapper.map(bankTransaction, BankTransactionFormDTO.class);
-        return bankTransactionFormDTO;
-    }
-*/
     
     /**
      * This method converts a DTO object to an Entity

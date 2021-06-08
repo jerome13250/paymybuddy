@@ -20,17 +20,16 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 /**
- * Integration test for UserController with SpringSecurity
+ * Integration test for LoginController with SpringSecurity
  * @author jerome
  *
  */
 
-/*
+
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-*/
-class UserControllerTestIT {
+class LoginControllerTestIT {
 
 	@Autowired
 	private MockMvc mvc;

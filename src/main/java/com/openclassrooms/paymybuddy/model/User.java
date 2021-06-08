@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.Currency;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -37,7 +38,7 @@ import lombok.ToString;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+//@ToString
 @Entity
 @Table(name = "user")
 @PasswordEquality
@@ -89,6 +90,38 @@ public class User {
 			fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
     private Set<UserTransaction> usertransactions;
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(email);
+	}
+
+	/**
+	 * Equals method is calculated on email cause it is the business key.
+	 * <br><br>
+	 * See here for explanations: <br>
+	 * <a href="https://www.baeldung.com/jpa-entity-equality#3-using-a-business-key">baeldung</a> <br>
+	 * 
+	 * "Using the JPA entity business key for equals and hashCode is always best choice:"<br>
+	 * <a href="https://vladmihalcea.com/hibernate-facts-equals-and-hashcode/">hibernate-facts-equals-and-hashcode</a> <br>
+	 * <a href="https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/">
+	 * equals-and-hashcode-using-the-jpa-entity-identifier</a>
+	 * 
+	 * 
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof User)) {
+			return false;
+		}
+		User other = (User) obj;
+		return Objects.equals(email, other.email);
+	}
+
+	
 
 
 }

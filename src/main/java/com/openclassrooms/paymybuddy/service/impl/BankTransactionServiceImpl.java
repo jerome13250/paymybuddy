@@ -14,6 +14,7 @@ import com.openclassrooms.paymybuddy.model.BankTransaction;
 import com.openclassrooms.paymybuddy.model.User;
 import com.openclassrooms.paymybuddy.repositories.BankTransactionRepository;
 import com.openclassrooms.paymybuddy.service.interfaces.BankTransactionService;
+import com.openclassrooms.paymybuddy.service.interfaces.LocalDateTimeService;
 import com.openclassrooms.paymybuddy.service.interfaces.UserService;
 import com.openclassrooms.paymybuddy.utils.paging.Paged;
 import com.openclassrooms.paymybuddy.utils.paging.Paging;
@@ -27,6 +28,8 @@ public class BankTransactionServiceImpl implements BankTransactionService {
 	private BankTransactionRepository bankTransactionRepository;
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private LocalDateTimeService localDateTimeServiceImpl;
 	
 	@Override
 	public void create(BankTransaction bankTransaction) {
@@ -34,7 +37,7 @@ public class BankTransactionServiceImpl implements BankTransactionService {
 		User currentUser = userService.getCurrentUser();
 		
 		bankTransaction.setBankaccountnumber(currentUser.getBankaccountnumber());
-		bankTransaction.setDatetime(LocalDateTime.now());
+		bankTransaction.setDatetime(localDateTimeServiceImpl.now());
 		bankTransaction.setUser(currentUser);
 				
 		bankTransactionRepository.save(bankTransaction);

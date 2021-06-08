@@ -3,6 +3,7 @@ package com.openclassrooms.paymybuddy.service.impl;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Service;
 import com.openclassrooms.paymybuddy.model.User;
 import com.openclassrooms.paymybuddy.model.UserTransaction;
 import com.openclassrooms.paymybuddy.repositories.UserTransactionRepository;
+import com.openclassrooms.paymybuddy.service.interfaces.CalculationService;
+import com.openclassrooms.paymybuddy.service.interfaces.LocalDateTimeService;
 import com.openclassrooms.paymybuddy.service.interfaces.UserService;
 import com.openclassrooms.paymybuddy.service.interfaces.UserTransactionService;
 import com.openclassrooms.paymybuddy.utils.paging.Paged;
@@ -29,18 +32,20 @@ public class UserTransactionServiceImpl implements UserTransactionService {
 	private UserTransactionRepository userTransactionRepository;
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private LocalDateTimeService localDateTimeServiceImpl;
+	@Autowired
+	private CalculationService calculationService;
 	
 	@Override
-	public void create(UserTransaction userTransaction) {
+	public void create(UserTransaction userTransaction, Map<String, BigDecimal> feesMap) {
 		logger.debug("Calling create(UserTransaction UserTransaction)");
 		User currentUser = userService.getCurrentUser();
 		
-		userTransaction.setDatetime(LocalDateTime.now());
+		userTransaction.setDatetime(localDateTimeServiceImpl.now());
 		userTransaction.setUserSource(currentUser);
-		//TODO: faire un service FeeCalculation:
-		BigDecimal fees = userTransaction.getAmount().divide(new BigDecimal("100"), RoundingMode.FLOOR);
-		userTransaction.setFees(fees);
-		userTransaction.setAmount(userTransaction.getAmount().subtract(fees));
+		userTransaction.setFees(feesMap.get("fees"));
+		userTransaction.setAmount(feesMap.get("finalAmount"));
 		
 		userTransactionRepository.save(userTransaction);
 	}

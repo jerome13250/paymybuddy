@@ -2,6 +2,8 @@ package com.openclassrooms.paymybuddy.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -19,21 +21,21 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.openclassrooms.paymybuddy.exceptions.UserAmountException;
 import com.openclassrooms.paymybuddy.model.Role;
 import com.openclassrooms.paymybuddy.model.User;
 import com.openclassrooms.paymybuddy.repositories.RoleRepository;
 import com.openclassrooms.paymybuddy.repositories.UserRepository;
-import com.openclassrooms.paymybuddy.service.impl.CalculationCurrencyService;
-import com.openclassrooms.paymybuddy.service.impl.LocalDateTimeService;
 import com.openclassrooms.paymybuddy.service.impl.UserServiceImpl;
+import com.openclassrooms.paymybuddy.service.interfaces.CalculationService;
+import com.openclassrooms.paymybuddy.service.interfaces.LocalDateTimeService;
 import com.openclassrooms.paymybuddy.service.interfaces.SecurityService;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
 	
-	LocalDateTime now;
-	User user;
 	
+		
 	@InjectMocks
 	UserServiceImpl userServiceImpl;
 
@@ -46,20 +48,26 @@ class UserServiceImplTest {
 	@Mock
 	BCryptPasswordEncoder bCryptPasswordEncoder;
 	@Mock
-	CalculationCurrencyService calculationCurrencyService;
+	CalculationService calculationService;
 	@Mock
-	LocalDateTimeService localDateTimeService;
+	LocalDateTimeService localDateTimeServiceImpl;
 	
+	LocalDateTime now;
+	User user1;
+	User user2;
 	
 	@BeforeEach
 	void initialize() {
-		
+		user1 = new User(1L,"John","Doe","johndoe@mail.com",now,"password","password",true,"1234",
+				new BigDecimal("100"),Currency.getInstance("USD"),new HashSet<>(),new HashSet<>(),new HashSet<>(),new HashSet<>());
+		user2 = new User(2L,"Jane","Doe","janedoe@mail.com",now,"password","password",true,"1234",
+				new BigDecimal("100"),Currency.getInstance("USD"),new HashSet<>(),new HashSet<>(),new HashSet<>(),new HashSet<>());
 	}
 	
 	@Test
 	void testCreateUser() {
 		// Arrange
-		LocalDateTime now = localDateTimeService.now();
+		LocalDateTime now = localDateTimeServiceImpl.now();
 		User user = new User(null,"John","Doe","johndoe@mail.com",now,"password","password",true,"1234",
 				null,Currency.getInstance("USD"),new HashSet<>(),new HashSet<>(),new HashSet<>(),new HashSet<>());
 		User userExpected = new User(null,"John","Doe","johndoe@mail.com",now,"passwordencrypted","passwordencrypted",true,"1234",
@@ -69,7 +77,7 @@ class UserServiceImplTest {
 		userExpected.setRoles(hashsetrole);
 		
 		when(bCryptPasswordEncoder.encode("password")).thenReturn("passwordencrypted");
-		when(localDateTimeService.now()).thenReturn(now);
+		when(localDateTimeServiceImpl.now()).thenReturn(now);
 		when(roleRepository.findByRolename("USER")).thenReturn(new Role(1L,"USER"));
 		
 		// Act
@@ -101,7 +109,7 @@ class UserServiceImplTest {
 	@Test
 	void testUpdateUser() {
 		// Arrange
-		LocalDateTime now = localDateTimeService.now();
+		LocalDateTime now = localDateTimeServiceImpl.now();
 		User user = new User(1L,"John","Doe","johndoe@mail.com",now,"passwordencrypted","",true,"1234",
 				new BigDecimal("1000"),Currency.getInstance("USD"),new HashSet<>(),new HashSet<>(),new HashSet<>(),new HashSet<>());
 		User userExpected = new User(1L,"John","Doe","johndoe@mail.com",now,"passwordencrypted","passwordencrypted",true,"1234",
@@ -129,7 +137,80 @@ class UserServiceImplTest {
 		assertEquals(userExpected.getUsertransactions(),user.getUsertransactions());
 	}
 	
+	@Test
+	void testFindByEmail() {
+		// Arrange
+		String email = "johndoe@mail.com";
+		User user = new User(null,"John","Doe","johndoe@mail.com",now,"password","password",true,"1234",
+				null,Currency.getInstance("USD"),new HashSet<>(),new HashSet<>(),new HashSet<>(),new HashSet<>());
+		when(userRepository.findByEmail(email)).thenReturn(user);
+		// Act
+		User resultUser = userServiceImpl.findByEmail(email);
+		// Assert
+		assertEquals(resultUser, user);
+	}
 	
+	
+	@Test
+	void testExistsByEmail() {
+		// Arrange
+		String email = "johndoe@mail.com";
+		when(userRepository.existsByEmail(email)).thenReturn(true);
+		// Act
+		Boolean result = userServiceImpl.existsByEmail(email);
+		// Assert
+		assertTrue(result);
+	}
+	
+	@Test
+	void testGetCurrentUser() {
+		// Arrange
+		when(securityService.getCurrentUserDetailsUserName()).thenReturn("johndoe@mail.com");
+		when(userRepository.findByEmail("johndoe@mail.com")).thenReturn(user1);
+		// Act
+		User resultUser = userServiceImpl.getCurrentUser();
+		// Assert
+		assertEquals(resultUser, user1);
+	}
+	
+	@Test
+	void testBankTransactionUpdateAmount() throws Exception {
+		// Arrange
+		when(calculationService.sumCurrencies(new BigDecimal("100"), Currency.getInstance("USD"),
+				new BigDecimal("100"), Currency.getInstance("USD"))).thenReturn(new BigDecimal("200"));
+		
+		// Act
+		userServiceImpl.bankTransactionUpdateAmount(user1, new BigDecimal("100"), Currency.getInstance("USD"));
+		
+		// Assert
+		assertEquals(user1.getAmount(),new BigDecimal("200"));
+		verify(userRepository, times(1)).save(user1);
+	}
+	
+	
+	@Test
+	void testBankTransactionUpdateAmount_Exception_InsufficientFund() throws Exception {
+		// Arrange
+		when(calculationService.sumCurrencies(new BigDecimal("100"), Currency.getInstance("USD"),
+				new BigDecimal("-500"), Currency.getInstance("USD"))).thenReturn(new BigDecimal("-400"));
+		
+		// Act+Assert
+		assertThrows(UserAmountException.class, () -> {
+			userServiceImpl.bankTransactionUpdateAmount(user1, new BigDecimal("-500"), Currency.getInstance("USD"));
+		    });
+	}
+	
+	@Test
+	void testBankTransactionUpdateAmount_Exception_UserAmountExceedsMax() throws Exception {
+		// Arrange
+		when(calculationService.sumCurrencies(new BigDecimal("100"), Currency.getInstance("USD"),
+				new BigDecimal("1000000000000000"), Currency.getInstance("USD"))).thenReturn(new BigDecimal("1000000000000100"));
+		
+		// Act+Assert
+		assertThrows(UserAmountException.class, () -> {
+			userServiceImpl.bankTransactionUpdateAmount(user1, new BigDecimal("1000000000000000"), Currency.getInstance("USD"));
+		    });
+	}
 	
 	
 }

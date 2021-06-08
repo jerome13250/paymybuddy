@@ -1,7 +1,7 @@
 package com.openclassrooms.paymybuddy.controller;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -23,6 +23,7 @@ import com.openclassrooms.paymybuddy.model.UserTransaction;
 import com.openclassrooms.paymybuddy.model.User;
 import com.openclassrooms.paymybuddy.model.dto.UserTransactionFormDTO;
 import com.openclassrooms.paymybuddy.service.interfaces.UserTransactionService;
+import com.openclassrooms.paymybuddy.service.interfaces.CalculationService;
 import com.openclassrooms.paymybuddy.service.interfaces.UserService;
 
 @Controller
@@ -39,6 +40,8 @@ public class UserTransactionController {
     private ModelMapper modelMapper;
 	@Autowired
     private CurrenciesAllowed currenciesAllowed;
+	@Autowired
+	private CalculationService calculationService;
 	
     @GetMapping("/usertransaction")
     public String getUsertransaction(
@@ -65,20 +68,23 @@ public class UserTransactionController {
     		Model model) {
     	
     	logger.info("POST: /usertransaction");
-    	User connectedUser = userService.getCurrentUser();
-    	model.addAttribute("user", connectedUser);//list of transactions + preferred currency
+    	User sourceUser = userService.getCurrentUser();
+    	model.addAttribute("user", sourceUser);//list of transactions + preferred currency
     	model.addAttribute("paged", userTransactionService.getCurrentUserUserTransactionPage(1, 5));
     	
     	if (bindingResult.hasErrors()) {        	
             return "usertransaction";
         }
     	
+    	logger.debug("Check userDestination belongs to buddies list");
     	//Check userDestination belongs to buddies list:
-        if ( !connectedUser.getConnections().contains(userTransactionFormDTO.getUserDestination()) ) {
+        if ( !sourceUser.getConnections().contains(userTransactionFormDTO.getUserDestination()) ) {
+        	logger.debug("Failure: unknown buddy");
         	bindingResult.rejectValue("userDestination", "userDestinationNotABuddy", "Please select a buddy !");
         	return "usertransaction";
         }
     	
+        logger.debug("Check UnknownCurrency");
     	//UnknownCurrency
         if ( !currenciesAllowed.getCurrenciesAllowedList().contains(userTransactionFormDTO.getCurrency()) ) {
         	bindingResult.rejectValue("currency", "UnknownCurrency", "This currency is not allowed.");
@@ -87,10 +93,19 @@ public class UserTransactionController {
     	
         UserTransaction userTransaction = convertToEntity(userTransactionFormDTO);
         
-    	
+    	//calculate fees:
+        Map<String, BigDecimal> feesMap = calculationService.calculateFees(userTransaction.getAmount());
+        
         //update user amount:
         try {
-			userService.updateAmount(connectedUser, userTransaction.getAmount(), userTransaction.getCurrency());
+			userService.userTransactionUpdateAmount(
+					sourceUser, 
+					userTransaction.getAmount(),
+					userTransactionFormDTO.getUserDestination(),
+					feesMap.get("finalAmount").negate(),  //Must become positive for destinationUser
+					userTransaction.getCurrency()
+					);
+			
 		} catch (UserAmountException e) {
 			logger.debug("UserAmountException");
 			bindingResult.rejectValue("amount", e.getErrorCode(), e.getDefaultMessage());
@@ -99,7 +114,7 @@ public class UserTransactionController {
         
               
         //create usertransaction:
-        userTransactionService.create(userTransaction);
+        userTransactionService.create(userTransaction, feesMap);
         
         //redirection do not use the current Model, it goes to GET /bantransaction
         return "redirect:/usertransaction";

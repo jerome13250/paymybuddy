@@ -19,6 +19,8 @@ import com.openclassrooms.paymybuddy.model.Role;
 import com.openclassrooms.paymybuddy.model.User;
 import com.openclassrooms.paymybuddy.repositories.RoleRepository;
 import com.openclassrooms.paymybuddy.repositories.UserRepository;
+import com.openclassrooms.paymybuddy.service.interfaces.CalculationService;
+import com.openclassrooms.paymybuddy.service.interfaces.LocalDateTimeService;
 import com.openclassrooms.paymybuddy.service.interfaces.SecurityService;
 import com.openclassrooms.paymybuddy.service.interfaces.UserService;
 import com.openclassrooms.paymybuddy.utils.paging.Paged;
@@ -38,9 +40,9 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	@Autowired
-	private CalculationCurrencyService calculationCurrencyService;
+	private CalculationService calculationService;
 	@Autowired
-	private LocalDateTimeService localDateTimeService;
+	private LocalDateTimeService localDateTimeServiceImpl;
 
 	@Override
 	public void create(User user) {
@@ -51,7 +53,7 @@ public class UserServiceImpl implements UserService {
 		//https://stackoverflow.com/questions/12566298/hibernate-bean-validation-issue :
 		user.setPasswordconfirm(encryptedPassword);
 		user.setEnabled(true); //by default new user is enabled
-		user.setInscriptiondatetime(localDateTimeService.now()); //time of user creation
+		user.setInscriptiondatetime(localDateTimeServiceImpl.now()); //time of user creation
 		user.setAmount(new BigDecimal(0));
 		
 		//Create the role for user, by default always create a USER role, not ADMIN...
@@ -85,18 +87,37 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void updateAmount(User user, BigDecimal amount, Currency currency) throws UserAmountException { 
+	public void bankTransactionUpdateAmount(User user, BigDecimal amount, Currency currency) throws UserAmountException { 
 		
-		BigDecimal result = calculationCurrencyService.sumCurrencies(user.getAmount(), user.getCurrency(), amount, currency);
-		if (result.compareTo(new BigDecimal(0))<0) {
+		BigDecimal resultSourceUser = calculationService.sumCurrencies(user.getAmount(), user.getCurrency(), amount, currency);
+		if (resultSourceUser.compareTo(new BigDecimal(0))<0) {
 			throw new UserAmountException("InsufficientFunds", "This amount exceeds your account value.");
 		}
-		if (result.compareTo(new BigDecimal(9999999))>0) {
-			throw new UserAmountException("UserAmountExceedsMax", "The user amount exceeds Max value.");
+		if (resultSourceUser.compareTo(new BigDecimal(9999999))>0) {
+			throw new UserAmountException("UserAmountExceedsMax", "Your account can not exceed max value allowed.");
 		}
 		
-		user.setAmount(result);
+		user.setAmount(resultSourceUser);
 		update(user);
+		
+	}
+	
+	@Override
+	public void userTransactionUpdateAmount(User sourceUser, BigDecimal amountTotal, User destinationUser, BigDecimal amountMinusFees, Currency currency) throws UserAmountException { 
+		
+		BigDecimal resultSourceUser = calculationService.sumCurrencies(sourceUser.getAmount(), sourceUser.getCurrency(), amountTotal, currency);
+		BigDecimal resultDestinationUser = calculationService.sumCurrencies(destinationUser.getAmount(), destinationUser.getCurrency(), amountMinusFees, currency);
+		if (resultSourceUser.compareTo(new BigDecimal(0))<0) {
+			throw new UserAmountException("InsufficientFunds", "This amount exceeds your account value.");
+		}
+		if (resultDestinationUser.compareTo(new BigDecimal(9999999))>0) {
+			throw new UserAmountException("UserAmountExceedsMax", "Your buddy account can not exceed max value allowed.");
+		}
+		
+		sourceUser.setAmount(resultSourceUser);
+		update(sourceUser);
+		destinationUser.setAmount(resultDestinationUser);
+		update(destinationUser);
 		
 	}
 

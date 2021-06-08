@@ -31,17 +31,17 @@ import com.openclassrooms.paymybuddy.service.interfaces.UserService;
 import com.openclassrooms.paymybuddy.testconfig.SpringWebTestConfig;
 
 /**
- * Unit test for UserController
+ * Unit test for LoginController
  * @author jerome
  *
  */ 
 
 //@WebMvcTest tells Spring Boot to instantiate only the web layer and not the entire context
-@WebMvcTest(controllers = UserController.class) 
+@WebMvcTest(controllers = LoginController.class) 
 //Need to create a UserDetailsService in SpringSecurityWebTestConfig.class because @Service are not loaded by @WebMvcTest :
 @Import(SpringWebTestConfig.class)
 
-class UserControllerTest {
+class LoginControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
