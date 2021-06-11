@@ -1,4 +1,4 @@
-package com.openclassrooms.paymybuddy.controller;
+package com.openclassrooms.paymybuddy.controller.IT;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
@@ -45,12 +45,12 @@ class LoginControllerTestIT {
 
 	@Test
 	void userLoginTest() throws Exception {
-		mvc.perform(formLogin("/login").user("sylvesterstallone@mail.com").password("123")).andExpect(authenticated());
+		mvc.perform(formLogin("/login").user("test@mail.com").password("123")).andExpect(authenticated());
 	}
 
 	@Test
 	void userLoginFailed() throws Exception {
-		mvc.perform(formLogin("/login").user("testuser@mail.com").password("wrongpassword")).andExpect(unauthenticated());
+		mvc.perform(formLogin("/login").user("test@mail.com").password("wrongpassword")).andExpect(unauthenticated());
 	}
 	
 	

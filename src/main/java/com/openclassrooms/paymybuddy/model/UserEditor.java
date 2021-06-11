@@ -41,7 +41,7 @@ public class UserEditor extends PropertyEditorSupport {
 			setValue(null);
 		} else {
 			//since it is for test only i return always the same fake User:
-			User user999 = new User(999L, "firstname999", "lastname999", "user999e@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),"password999", "", true, "1AX256",
+			User user999 = new User(54L, "firstname999", "lastname999", "anothertest@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),"password999", "", true, "1AX256",
 					new BigDecimal(200), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>() );
 			setValue(user999);
 		}

@@ -1,4 +1,4 @@
-package com.openclassrooms.paymybuddy.controller;
+package com.openclassrooms.paymybuddy.controller.IT;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -18,24 +18,28 @@ import org.springframework.test.web.servlet.MockMvc;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-class ConnectionControllerTestIT {
+class UserTransactionControllerTestIT {
 
 	@Autowired
 	private MockMvc mvc;
+	
 
 	@Test
 	@WithMockUser(username="test@mail.com") //test@mail.com exists in our test database
-	void GETconnectionPageShouldReturnOK() throws Exception {
-		mvc.perform(get("/connection")).andDo(print()).andExpect(status().isOk());
+	void getUsertransactionShouldReturnOK() throws Exception {
+		mvc.perform(get("/usertransaction")).andDo(print()).andExpect(status().isOk());
 	}
-	
+
+
 	@Test
 	@WithMockUser(username="test@mail.com") //test@mail.com exists in our test database
-	void POSTconnectionPageShouldReturnOK() throws Exception {
-		mvc.perform(post("/connection")
-				.param("email", "bradpitt@mail.com")
+	void postUsertransaction() throws Exception {
+		mvc.perform(post("/usertransaction")
+				.param("userDestination", "anothertest@mail.com")
+				.param("amount", "50")
+				.param("currency", "USD")
 				.with(csrf())
-				).andDo(print()).andExpect(status().isOk());
+				).andDo(print()).andExpect(status().is3xxRedirection());
 	}
 
 		

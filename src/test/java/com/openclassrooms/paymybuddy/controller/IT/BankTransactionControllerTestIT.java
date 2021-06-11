@@ -1,4 +1,4 @@
-package com.openclassrooms.paymybuddy.controller;
+package com.openclassrooms.paymybuddy.controller.IT;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -30,17 +30,6 @@ class BankTransactionControllerTestIT {
 	@Autowired
 	private MockMvc mvc;
 	
-	@Autowired
-	private UserService userService;
-	
-	@BeforeEach
-	void initialize() {
-		//user test@mail.com always has 1000 USD on his account
-		User user = userService.findByEmail("test@mail.com");
-		user.setAmount(new BigDecimal(5000));
-		userService.update(user);
-	}
-	
 
 	@Test
 	@WithMockUser(username="test@mail.com") //test@mail.com exists in our test database
@@ -58,10 +47,6 @@ class BankTransactionControllerTestIT {
 				.param("currency", "USD")
 				.with(csrf())
 				).andDo(print()).andExpect(status().is3xxRedirection());
-		
-		//check user account value after transaction:
-		User user = userService.findByEmail("test@mail.com");
-		assertEquals(new BigDecimal("1100"),user.getAmount());
 		
 	}
 	

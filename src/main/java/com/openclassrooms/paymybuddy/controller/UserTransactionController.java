@@ -2,6 +2,7 @@ package com.openclassrooms.paymybuddy.controller;
 
 import java.math.BigDecimal;
 import java.util.Map;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -62,7 +63,6 @@ public class UserTransactionController {
     }
     
     @Transactional
-    //FIXME:need transactional
     @PostMapping("/usertransaction")
     public String postUsertransactionGetMoney(
     		@Valid @ModelAttribute("usertransactionFormDTO") UserTransactionFormDTO userTransactionFormDTO, 
@@ -80,6 +80,7 @@ public class UserTransactionController {
     	
     	logger.debug("Check userDestination belongs to buddies list");
     	//Check userDestination belongs to buddies list:
+    	Set<User> test = sourceUser.getConnections();
         if ( !sourceUser.getConnections().contains(userTransactionFormDTO.getUserDestination()) ) {
         	logger.debug("Failure: unknown buddy");
         	bindingResult.rejectValue("userDestination", "userDestinationNotABuddy", "Please select a buddy !");
