@@ -61,26 +61,16 @@ public interface UserService {
     User getCurrentUser();
     
     /**
-     * Update the amount of money of a user after a bank transaction.
+     * Sum the amount of a user with a transaction amount.
      *
-     * @param user that made a bank transaction.
-     * @param amount of the bank transaction.
+     * @param user to update.
+     * @param amount of the transaction.
      * @param currency of transaction.
      * @throws UserAmountException
      */
-    void bankTransactionUpdateAmount(User user, BigDecimal amount, Currency currency) throws UserAmountException;
+    void sumAmount(User user, BigDecimal amount, Currency currency) throws UserAmountException;
     
-    /**
-     * Update the amount of money of the 2 users that have a user transaction.
-     * @param sourceUser that gives money.
-     * @param amountTotal the total amount that is given.
-     * @param destinationUser that receives money.
-     * @param amountMinusFees the amount received by destinationUser (=amountTotal-fees)
-     * @param currency of the transaction
-     * @throws UserAmountException
-     */
-    void userTransactionUpdateAmount(User sourceUser, BigDecimal amountTotal, User destinationUser, BigDecimal amountMinusFees, Currency currency) throws UserAmountException;
-    
+
     /**
      * Paged information to create the User connection list display in browser.
      * @param pageNumber the page number that is required to display

@@ -38,7 +38,6 @@ import lombok.ToString;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-//@ToString
 @Entity
 @Table(name = "user")
 @PasswordEquality
@@ -64,7 +63,6 @@ public class User {
 	@NotBlank
 	private String bankaccountnumber;
 	private BigDecimal amount;
-	
 	private Currency currency;
 	
 	@ManyToMany

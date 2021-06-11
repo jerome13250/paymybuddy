@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -60,6 +61,7 @@ public class UserTransactionController {
         return "usertransaction";
     }
     
+    @Transactional
     //FIXME:need transactional
     @PostMapping("/usertransaction")
     public String postUsertransactionGetMoney(
@@ -98,11 +100,14 @@ public class UserTransactionController {
         
         //update user amount:
         try {
-			userService.userTransactionUpdateAmount(
+			userService.sumAmount(
 					sourceUser, 
-					userTransaction.getAmount(),
+					userTransaction.getAmount().negate(), //Must be negative for sourceUser 
+					userTransaction.getCurrency()
+					);
+			userService.sumAmount(
 					userTransactionFormDTO.getUserDestination(),
-					feesMap.get("finalAmount").negate(),  //Must become positive for destinationUser
+					feesMap.get("finalAmount"),  
 					userTransaction.getCurrency()
 					);
 			
@@ -131,10 +136,6 @@ public class UserTransactionController {
      */
     private UserTransaction convertToEntity(UserTransactionFormDTO userTransactionFormDTO) {
     	UserTransaction userTransaction = modelMapper.map(userTransactionFormDTO, UserTransaction.class);
-        
-    	//Money sent from user so amount always becomes negative:
-    	userTransaction.setAmount(userTransactionFormDTO.getAmount().negate());
-
 
         return userTransaction;
     }

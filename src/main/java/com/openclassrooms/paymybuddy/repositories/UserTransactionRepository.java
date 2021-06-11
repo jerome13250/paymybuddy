@@ -12,18 +12,11 @@ public interface UserTransactionRepository  extends JpaRepository<UserTransactio
 	
 
 	@Query(value = 
-			"SELECT "
-			+ "	t.id, "
-			+ "	t.usersource_id, "
-			+ "	t.userdestination_id, "
-			+ "	t.dateTime, "
-			+ "	CASE t.usersource_id WHEN :userid THEN t.amount ELSE t.amount*-1 END AS amount, "
-			+ "	t.currency, "
-			+ "	CASE t.usersource_id WHEN :userid THEN t.fees ELSE NULL END AS fees "
-			+ "FROM transactions_user t "
-			+ "where t.usersource_id = :userid OR t.userdestination_id = :userid"
+			"SELECT * "
+			+ "FROM transactions_user "
+			+ "WHERE usersource_id = :usersourceid OR userdestination_id = :usersourceid "
 			,
 			nativeQuery = true)
-	public Page<UserTransaction> findUserTransactionByUserId(@Param("userid") Long userid, Pageable pageRequest);
+	public Page<UserTransaction> findUserTransactionByUserId(@Param("usersourceid") Long usersourceid, Pageable pageRequest);
 	
 }

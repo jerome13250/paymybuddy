@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -57,7 +58,7 @@ public class BankTransactionController {
         return "banktransaction";
     }
     
-    //FIXME:need transactional
+    @Transactional
     @PostMapping("/banktransaction")
     public String postBanktransactionGetMoney(
     		@Valid @ModelAttribute("banktransactionFormDTO") BankTransactionFormDTO bankTransactionFormDTO, 
@@ -84,7 +85,7 @@ public class BankTransactionController {
 
         //update user amount:
         try {
-			userService.bankTransactionUpdateAmount(connectedUser, bankTransaction.getAmount(), bankTransaction.getCurrency());
+			userService.sumAmount(connectedUser, bankTransaction.getAmount(), bankTransaction.getCurrency());
 		} catch (UserAmountException e) {
 			logger.debug("UserAmountException");
 			bindingResult.rejectValue("amount", e.getErrorCode(), e.getDefaultMessage());

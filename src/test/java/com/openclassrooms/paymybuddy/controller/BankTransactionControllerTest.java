@@ -1,8 +1,8 @@
 package com.openclassrooms.paymybuddy.controller;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.any;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -20,7 +20,6 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -126,7 +125,7 @@ class BankTransactionControllerTest {
 		when(userServiceMock.getCurrentUser()).thenReturn(user1);
 		when(bankTransactionServiceMock.getCurrentUserBankTransactionPage(1, 5)).thenReturn(paged); //display list of banktransactions
 		doThrow(new UserAmountException("InsufficientFunds", "This amount exceeds your account value."))
-			.when(userServiceMock).bankTransactionUpdateAmount(any(User.class),any(BigDecimal.class),any(Currency.class));
+			.when(userServiceMock).sumAmount(any(User.class),any(BigDecimal.class),any(Currency.class));
 		
 		mockMvc.perform(post("/banktransaction")
 				.param("amount", "1500")
@@ -240,8 +239,8 @@ class BankTransactionControllerTest {
 		//ARRANGE
 		when(userServiceMock.getCurrentUser()).thenReturn(user1);
 		when(bankTransactionServiceMock.getCurrentUserBankTransactionPage(1, 5)).thenReturn(paged); //display list of banktransactions
-		doThrow(new UserAmountException("UserAmountExceedsMax", "The user amount exceeds Max value."))
-			.when(userServiceMock).bankTransactionUpdateAmount(any(User.class),any(BigDecimal.class),any(Currency.class));
+		doThrow(new UserAmountException("UserAmountExceedsMax", "Account can not exceed max value allowed."))
+			.when(userServiceMock).sumAmount(any(User.class),any(BigDecimal.class),any(Currency.class));
 		
 		
 		mockMvc.perform(post("/banktransaction")

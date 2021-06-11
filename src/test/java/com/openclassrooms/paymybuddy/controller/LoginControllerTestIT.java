@@ -19,13 +19,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-/**
- * Integration test for LoginController with SpringSecurity
- * @author jerome
- *
- */
-
-
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -52,7 +45,7 @@ class LoginControllerTestIT {
 
 	@Test
 	void userLoginTest() throws Exception {
-		mvc.perform(formLogin("/login").user("bradpitt@mail.com").password("123")).andExpect(authenticated());
+		mvc.perform(formLogin("/login").user("sylvesterstallone@mail.com").password("123")).andExpect(authenticated());
 	}
 
 	@Test

@@ -8,13 +8,10 @@ import org.springframework.data.repository.query.Param;
 
 import com.openclassrooms.paymybuddy.model.User;
 
-
 public interface UserRepository extends JpaRepository<User, Long> {
-	//Spring is able to create the query by analyzing the method name
-	//https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods.query-creation
+	
 	public User findByEmail(String email); 
 
-		
 	@Query("SELECT CASE "
 			+ "WHEN COUNT(u) > 0 THEN true"
 			+ " ELSE false END "
@@ -30,5 +27,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
 			nativeQuery = true)
 	public Page<User> findConnectionById(@Param("id") Long id, Pageable pageRequest);
 
-	
 }

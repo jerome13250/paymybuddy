@@ -1,8 +1,6 @@
 package com.openclassrooms.paymybuddy.service.impl;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.time.LocalDateTime;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -16,8 +14,8 @@ import org.springframework.stereotype.Service;
 import com.openclassrooms.paymybuddy.model.User;
 import com.openclassrooms.paymybuddy.model.UserTransaction;
 import com.openclassrooms.paymybuddy.repositories.UserTransactionRepository;
-import com.openclassrooms.paymybuddy.service.interfaces.CalculationService;
 import com.openclassrooms.paymybuddy.service.interfaces.LocalDateTimeService;
+import com.openclassrooms.paymybuddy.service.interfaces.PagingService;
 import com.openclassrooms.paymybuddy.service.interfaces.UserService;
 import com.openclassrooms.paymybuddy.service.interfaces.UserTransactionService;
 import com.openclassrooms.paymybuddy.utils.paging.Paged;
@@ -35,7 +33,7 @@ public class UserTransactionServiceImpl implements UserTransactionService {
 	@Autowired
 	private LocalDateTimeService localDateTimeServiceImpl;
 	@Autowired
-	private CalculationService calculationService;
+	private PagingService pagingService;
 	
 	@Override
 	public void create(UserTransaction userTransaction, Map<String, BigDecimal> feesMap) {
@@ -53,8 +51,8 @@ public class UserTransactionServiceImpl implements UserTransactionService {
 	@Override
 	public Paged<UserTransaction> getCurrentUserUserTransactionPage(int pageNumber, int size) {
 		
-		PageRequest request = PageRequest.of(pageNumber - 1, size, Sort.by(Sort.Direction.DESC, "id"));//TODO: Sort by date 
+		PageRequest request = PageRequest.of(pageNumber - 1, size, Sort.by(Sort.Direction.DESC, "id"));
         Page<UserTransaction> page = userTransactionRepository.findUserTransactionByUserId(userService.getCurrentUser().getId(),request);
-        return new Paged<>(page, Paging.of(page.getTotalPages(), pageNumber));
+        return new Paged<>(page, pagingService.of(page.getTotalPages(), pageNumber));
 	}
 }
