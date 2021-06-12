@@ -9,6 +9,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.math.BigDecimal;
 
+import javax.transaction.Transactional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,6 +32,17 @@ class BankTransactionControllerTestIT {
 	@Autowired
 	private MockMvc mvc;
 	
+	@Autowired
+	private UserService userservice;
+	
+	@BeforeEach
+	void initializeDatabaseValues () {
+		User userTest = userservice.findByEmail("test@mail.com");
+		userTest.setAmount(new BigDecimal("1000"));
+		userTest.getBanktransactions().clear();
+		userservice.update(userTest);
+		
+	}
 
 	@Test
 	@WithMockUser(username="test@mail.com") //test@mail.com exists in our test database
@@ -47,6 +60,9 @@ class BankTransactionControllerTestIT {
 				.param("currency", "USD")
 				.with(csrf())
 				).andDo(print()).andExpect(status().is3xxRedirection());
+		
+		User userTest = userservice.findByEmail("test@mail.com");
+		assertEquals(new BigDecimal("1100.00"),userTest.getAmount(), "1000 - bank transaction");
 		
 	}
 	

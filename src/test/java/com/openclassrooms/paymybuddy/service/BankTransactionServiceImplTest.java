@@ -59,7 +59,7 @@ public class BankTransactionServiceImplTest {
 	@BeforeEach
 	void initialize() {
 		now = LocalDateTime.of(2019, Month.MARCH, 28, 14, 33, 48);
-		user1 = new User(1L,"John","Doe","johndoe@mail.com",now,"password","password",true,"1234",
+		user1 = new User(1L,"John","Doe","johndoe@mail.com",now,"password",true,"1234",
 				null,Currency.getInstance("USD"),new HashSet<>(),new HashSet<>(),new HashSet<>(),new HashSet<>());
 		
 		bankTransaction1 = new BankTransaction(50L, user1, "1234", now, new BigDecimal("1000"), Currency.getInstance("USD"));

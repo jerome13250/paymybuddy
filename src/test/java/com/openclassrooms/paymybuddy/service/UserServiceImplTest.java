@@ -68,9 +68,9 @@ class UserServiceImplTest {
 
 	@BeforeEach
 	void initialize() {
-		user1 = new User(1L,"John","Doe","johndoe@mail.com",now,"password","password",true,"1234",
+		user1 = new User(1L,"John","Doe","johndoe@mail.com",now,"password",true,"1234",
 				new BigDecimal("100"),Currency.getInstance("USD"),new HashSet<>(),new HashSet<>(),new HashSet<>(),new HashSet<>());
-		user2 = new User(2L,"Jane","Doe","janedoe@mail.com",now,"password","password",true,"1234",
+		user2 = new User(2L,"Jane","Doe","janedoe@mail.com",now,"password",true,"1234",
 				new BigDecimal("100"),Currency.getInstance("USD"),new HashSet<>(),new HashSet<>(),new HashSet<>(),new HashSet<>());
 	}
 
@@ -78,9 +78,9 @@ class UserServiceImplTest {
 	void testCreateUser() {
 		// Arrange
 		LocalDateTime now = localDateTimeServiceImpl.now();
-		User user = new User(null,"John","Doe","johndoe@mail.com",now,"password","password",true,"1234",
+		User user = new User(null,"John","Doe","johndoe@mail.com",now,"password",true,"1234",
 				null,Currency.getInstance("USD"),new HashSet<>(),new HashSet<>(),new HashSet<>(),new HashSet<>());
-		User userExpected = new User(null,"John","Doe","johndoe@mail.com",now,"passwordencrypted","passwordencrypted",true,"1234",
+		User userExpected = new User(null,"John","Doe","johndoe@mail.com",now,"passwordencrypted",true,"1234",
 				new BigDecimal("0"),Currency.getInstance("USD"),new HashSet<>(),new HashSet<>(),new HashSet<>(),new HashSet<>());
 		HashSet<Role> hashsetrole = new HashSet<>();
 		hashsetrole.add(new Role(1L,"USER"));
@@ -110,7 +110,7 @@ class UserServiceImplTest {
 		assertEquals(userExpected.getEnabled(),user.getEnabled());
 		assertEquals(userExpected.getInscriptiondatetime(),user.getInscriptiondatetime());
 		assertEquals(userExpected.getPassword(),user.getPassword());
-		assertEquals(userExpected.getPasswordconfirm(),user.getPasswordconfirm());
+		//assertEquals(userExpected.getPasswordconfirm(),user.getPasswordconfirm());
 		assertEquals(userExpected.getRoles(),user.getRoles());
 		assertEquals(userExpected.getUsertransactions(),user.getUsertransactions());
 
@@ -120,9 +120,9 @@ class UserServiceImplTest {
 	void testUpdateUser() {
 		// Arrange
 		LocalDateTime now = localDateTimeServiceImpl.now();
-		User user = new User(1L,"John","Doe","johndoe@mail.com",now,"passwordencrypted","",true,"1234",
+		User user = new User(1L,"John","Doe","johndoe@mail.com",now,"passwordencrypted",true,"1234",
 				new BigDecimal("1000"),Currency.getInstance("USD"),new HashSet<>(),new HashSet<>(),new HashSet<>(),new HashSet<>());
-		User userExpected = new User(1L,"John","Doe","johndoe@mail.com",now,"passwordencrypted","passwordencrypted",true,"1234",
+		User userExpected = new User(1L,"John","Doe","johndoe@mail.com",now,"passwordencrypted",true,"1234",
 				new BigDecimal("1000"),Currency.getInstance("USD"),new HashSet<>(),new HashSet<>(),new HashSet<>(),new HashSet<>());
 
 		// Act
@@ -142,7 +142,7 @@ class UserServiceImplTest {
 		assertEquals(userExpected.getEnabled(),user.getEnabled());
 		assertEquals(userExpected.getInscriptiondatetime(),user.getInscriptiondatetime());
 		assertEquals(userExpected.getPassword(),user.getPassword());
-		assertEquals(userExpected.getPasswordconfirm(),user.getPasswordconfirm());
+		//assertEquals(userExpected.getPasswordconfirm(),user.getPasswordconfirm());
 		assertEquals(userExpected.getRoles(),user.getRoles());
 		assertEquals(userExpected.getUsertransactions(),user.getUsertransactions());
 	}
@@ -151,7 +151,7 @@ class UserServiceImplTest {
 	void testFindByEmail() {
 		// Arrange
 		String email = "johndoe@mail.com";
-		User user = new User(null,"John","Doe","johndoe@mail.com",now,"password","password",true,"1234",
+		User user = new User(null,"John","Doe","johndoe@mail.com",now,"password",true,"1234",
 				null,Currency.getInstance("USD"),new HashSet<>(),new HashSet<>(),new HashSet<>(),new HashSet<>());
 		when(userRepository.findByEmail(email)).thenReturn(user);
 		// Act

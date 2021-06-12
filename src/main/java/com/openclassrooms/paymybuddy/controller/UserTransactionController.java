@@ -80,7 +80,6 @@ public class UserTransactionController {
     	
     	logger.debug("Check userDestination belongs to buddies list");
     	//Check userDestination belongs to buddies list:
-    	Set<User> test = sourceUser.getConnections();
         if ( !sourceUser.getConnections().contains(userTransactionFormDTO.getUserDestination()) ) {
         	logger.debug("Failure: unknown buddy");
         	bindingResult.rejectValue("userDestination", "userDestinationNotABuddy", "Please select a buddy !");

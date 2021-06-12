@@ -3,16 +3,16 @@ package com.openclassrooms.paymybuddy.validation;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-import com.openclassrooms.paymybuddy.model.User;
+import com.openclassrooms.paymybuddy.model.dto.UserFormDTO;
 
-public class PasswordEqualityValidator implements ConstraintValidator<PasswordEquality, User>{
+public class PasswordEqualityValidator implements ConstraintValidator<PasswordEquality, UserFormDTO>{
 
 	@Override
-	public boolean isValid(User user, ConstraintValidatorContext context) {
+	public boolean isValid(UserFormDTO userFormDTO, ConstraintValidatorContext context) {
 		
-		if ( user.getPassword() == null || user.getPasswordconfirm() == null ) {
+		if ( userFormDTO.getPassword() == null || userFormDTO.getPasswordconfirm() == null ) {
 			return false;
 		}
-		return user.getPassword().equals(user.getPasswordconfirm());
+		return userFormDTO.getPassword().equals(userFormDTO.getPasswordconfirm());
 	}
 }

@@ -64,7 +64,7 @@ class UserTransactionControllerTest {
 	
 	User user1;
 	User user2;
-	User user999;
+	User user54;
 	UserTransaction userTransaction1;
 	UserTransaction userTransaction2;
 	UserTransaction userTransaction3;
@@ -72,11 +72,11 @@ class UserTransactionControllerTest {
 	
 	@BeforeEach
 	void setup() {
-		user1 = new User(1L, "firstname1", "lastname1", "user1e@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),"password1", "", true, "1AX256",
+		user1 = new User(1L, "firstname1", "lastname1", "user1@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),"password1", true, "1AX256",
 				new BigDecimal(100), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>() );
-		user2 = new User(2L, "firstname2", "lastname2", "user2e@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),"password21", "", true, "1AX256",
+		user2 = new User(2L, "firstname2", "lastname2", "user2@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),"password21", true, "1AX256",
 				new BigDecimal(200), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>() );
-		user999 = new User(999L, "firstname999", "lastname999", "user999e@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),"password999", "", true, "1AX256",
+		user54 = new User(54L, "firstname54", "lastname54", "anothertest@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),"password54", true, "1AX256",
 				new BigDecimal(200), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>() );
 		
 		userTransaction1 = new UserTransaction(1L, user1, user2, LocalDateTime.of(2025, 01, 01, 00, 45),
@@ -118,7 +118,7 @@ class UserTransactionControllerTest {
 	@Test
 	void PostUserTransaction_SendMoneyShouldSucceedAndRedirected() throws Exception {
 		//ARRANGE
-		user1.getConnections().add(user999); //add user 999, same as UserEditor default user
+		user1.getConnections().add(user54); //add user 999, same as UserEditor default user
 		when(userServiceMock.getCurrentUser()).thenReturn(user1);
 		when(userTransactionServiceMock.getCurrentUserUserTransactionPage(1, 5)).thenReturn(paged); //display list of usertransactions
 		Map<String, BigDecimal> feesMap = new HashMap<>();
@@ -132,7 +132,7 @@ class UserTransactionControllerTest {
 				.param("currency", "USD")
 				.param("userDestination","999") //THIS CREATES BUG !
 				.with(csrf()))
-		.andExpect(status().is3xxRedirection()) //go to usertransaction page
+		.andExpect(status().is3xxRedirection()) //redirection to usertransaction page
 		.andExpect(redirectedUrl("/usertransaction"))
 		;
 	}

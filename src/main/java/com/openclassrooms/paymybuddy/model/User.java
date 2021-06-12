@@ -40,7 +40,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @Entity
 @Table(name = "user")
-@PasswordEquality
 public class User {
 
 	@Id
@@ -56,9 +55,6 @@ public class User {
 	private LocalDateTime inscriptiondatetime;
 	@NotBlank
 	private String password;
-	@Transient
-	@NotBlank
-	private String passwordconfirm;
 	private Boolean enabled;
 	@NotBlank
 	private String bankaccountnumber;
@@ -72,7 +68,7 @@ public class User {
 			inverseJoinColumns = @JoinColumn(name = "roles_id"))
 	private Set<Role> roles;
 	
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany
 	@JoinTable(
 			name = "user_connections", 
 			joinColumns = @JoinColumn(name = "user_id"), 

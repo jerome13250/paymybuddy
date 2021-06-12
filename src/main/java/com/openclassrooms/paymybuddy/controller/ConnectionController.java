@@ -31,7 +31,7 @@ public class ConnectionController {
 
     @PostMapping("/connection")
     public String connectionAdd(@RequestParam String email , Model model) { 
-    	logger.info("Calling: POST /connection");
+    	logger.info("POST /connection");
     	User user = userService.getCurrentUser();
     	//check connection mail exists in DB:
     	if ( !userService.existsByEmail(email) ) {
@@ -56,7 +56,7 @@ public class ConnectionController {
 
     @PostMapping("/connectionDelete")
     public String connectionDelete(@RequestParam Long id) { 
-    	logger.info("Calling: POST /connectionDelete");
+    	logger.info("POST /connectionDelete");
     	User user = userService.getCurrentUser();
     	user.getConnections().removeIf(connectionUser -> (connectionUser.getId()==id) );
     	userService.update(user);

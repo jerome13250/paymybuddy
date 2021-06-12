@@ -62,9 +62,9 @@ public class UserTransactionServiceImplTest {
 	@BeforeEach
 	void initialize() {
 		now = LocalDateTime.of(2019, Month.MARCH, 28, 14, 33, 48);
-		user1 = new User(1L,"John","Doe","johndoe@mail.com",now,"password","password",true,"1234",
+		user1 = new User(1L,"John","Doe","johndoe@mail.com",now,"password",true,"1234",
 				null,Currency.getInstance("USD"),new HashSet<>(),new HashSet<>(),new HashSet<>(),new HashSet<>());
-		user2 = new User(2L,"Jane","Doe","janedoe@mail.com",now,"password","password",true,"4321",
+		user2 = new User(2L,"Jane","Doe","janedoe@mail.com",now,"password",true,"4321",
 				null,Currency.getInstance("USD"),new HashSet<>(),new HashSet<>(),new HashSet<>(),new HashSet<>());
 		
 		userTransaction1 = new UserTransaction(50L, user1, user2, now, new BigDecimal("90"), Currency.getInstance("USD"), new BigDecimal("10"));

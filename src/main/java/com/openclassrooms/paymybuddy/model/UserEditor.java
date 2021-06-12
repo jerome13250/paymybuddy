@@ -6,9 +6,12 @@ import java.time.LocalDateTime;
 import java.util.Currency;
 import java.util.HashSet;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
+import com.openclassrooms.paymybuddy.controller.UserTransactionController;
 import com.openclassrooms.paymybuddy.service.interfaces.UserService;
 
 /**
@@ -27,23 +30,28 @@ import com.openclassrooms.paymybuddy.service.interfaces.UserService;
 //FIXME: this is an ugly solution to unit test error. Needs to be corrected...
 public class UserEditor extends PropertyEditorSupport {
 
+	Logger logger = LoggerFactory.getLogger(UserEditor.class);
 
 	@Override
 	public String getAsText() {
 		User user = (User) getValue();
-
+		String returnValue = user == null ? "" : user.getId().toString();
+		logger.debug("PROPERTYEDITOR called : UserEditor.getAsText = {}",returnValue);
+		
 		return user == null ? "" : user.getId().toString();
 	}
 
 	@Override
 	public void setAsText(String text) throws IllegalArgumentException {
+		logger.debug("PROPERTYEDITOR called : UserEditor.setAsText");
+		
 		if (StringUtils.isEmpty(text)) {
 			setValue(null);
 		} else {
 			//since it is for test only i return always the same fake User:
-			User user999 = new User(54L, "firstname999", "lastname999", "anothertest@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),"password999", "", true, "1AX256",
+			User user54 = new User(54L, "firstname54", "lastname54", "anothertest@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),"password54", true, "1AX256",
 					new BigDecimal(200), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>() );
-			setValue(user999);
+			setValue(user54);
 		}
 	}
 }

@@ -52,11 +52,11 @@ class ConnectionControllerTest {
 	
 	@BeforeEach
 	void setup() {
-		user1 = new User(1L, "firstname1", "lastname1", "user1e@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),"password1", "", true, "1AX256",
+		user1 = new User(1L, "firstname1", "lastname1", "user1e@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),"password1", true, "1AX256",
 				new BigDecimal(100), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>() );
-		user2 = new User(2L, "firstname2", "lastname2", "user2e@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),"password2", "", true, "1AX256",
+		user2 = new User(2L, "firstname2", "lastname2", "user2e@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),"password2", true, "1AX256",
 				new BigDecimal(200), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>() );
-		user3 = new User(3L, "firstname3", "lastname3", "user3e@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),"password3", "", true, "1AX256",
+		user3 = new User(3L, "firstname3", "lastname3", "user3e@mail.com", LocalDateTime.of(2025, 01, 01, 00, 45),"password3", true, "1AX256",
 				new BigDecimal(300), Currency.getInstance("USD"), new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>() );
 	
 		User[] userArray = {user1,user2,user3};

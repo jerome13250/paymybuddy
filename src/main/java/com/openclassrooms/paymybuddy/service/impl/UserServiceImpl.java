@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
 		user.setPassword(encryptedPassword);
 		//Setting value is required despite passwordconfirm being Transient, hibernate does a validation and checks @PasswordEquality
 		//https://stackoverflow.com/questions/12566298/hibernate-bean-validation-issue :
-		user.setPasswordconfirm(encryptedPassword);
+		//user.setPasswordconfirm(encryptedPassword);
 		user.setEnabled(true); //by default new user is enabled
 		user.setInscriptiondatetime(localDateTimeService.now()); //time of user creation
 		user.setAmount(new BigDecimal(0));
@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public void update(User user) {
-		user.setPasswordconfirm(user.getPassword());
+		//user.setPasswordconfirm(user.getPassword());
 		logger.debug("Calling update(User user)");		
 		userRepository.save(user);
 	}
