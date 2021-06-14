@@ -20,12 +20,15 @@ public class UserTransactionFormDTO {
 	
 	//validation is done in UserTransactionController
 	private User userDestination;
+	//TODO: change to String
+	//private String userDestinationEmail;
 	
 	@NotNull
 	@Positive
 	@Max(99999999) //due to Mysql setting : DECIMAL(10,2) to store amount
 	private BigDecimal amount;
 	
+	@NotNull
 	//validation is done in UserTransactionController
 	private Currency currency;
 	

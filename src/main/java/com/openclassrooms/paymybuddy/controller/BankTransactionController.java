@@ -1,7 +1,5 @@
 package com.openclassrooms.paymybuddy.controller;
 
-import java.math.BigDecimal;
-
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
@@ -94,6 +92,7 @@ public class BankTransactionController {
         
         //create banktransaction:
         bankTransactionService.create(bankTransaction);
+        connectedUser.getBanktransactions().add(bankTransaction);
         
         //redirection do not use the current Model, it goes to GET /bantransaction
         return "redirect:/banktransaction";

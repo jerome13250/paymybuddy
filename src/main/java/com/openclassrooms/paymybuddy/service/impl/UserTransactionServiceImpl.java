@@ -19,7 +19,6 @@ import com.openclassrooms.paymybuddy.service.interfaces.PagingService;
 import com.openclassrooms.paymybuddy.service.interfaces.UserService;
 import com.openclassrooms.paymybuddy.service.interfaces.UserTransactionService;
 import com.openclassrooms.paymybuddy.utils.paging.Paged;
-import com.openclassrooms.paymybuddy.utils.paging.Paging;
 
 @Service
 public class UserTransactionServiceImpl implements UserTransactionService {

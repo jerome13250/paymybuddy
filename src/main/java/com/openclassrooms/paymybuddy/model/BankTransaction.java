@@ -16,11 +16,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Getter
 @Setter
-//@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -31,6 +29,9 @@ public class BankTransaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	//EAGER fetching is very bad from a performance perspective : https://vladmihalcea.com/eager-fetching-is-a-code-smell/
+	//Unfortunately, JPA 1.0 decided that @ManyToOne and @OneToOne should default to FetchType.EAGER , so now you have to
+	//explicitly mark these two associations as FetchType.LAZY.
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;

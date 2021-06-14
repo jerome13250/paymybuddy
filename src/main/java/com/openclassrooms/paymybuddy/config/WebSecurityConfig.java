@@ -20,7 +20,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
 
-    //TODO: Verifier si on peut pas laisser le crypt par defaut qui ajoutera {bcrypt}
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();

@@ -24,7 +24,7 @@ import com.openclassrooms.paymybuddy.testconfig.SpringWebTestConfig;
 @WebMvcTest(controllers = RegistrationController.class) 
 //Need to create a UserDetailsService in SpringSecurityWebTestConfig.class because @Service are not loaded by @WebMvcTest :
 @Import(SpringWebTestConfig.class)
-public class RegistrationControllerTest {
+class RegistrationControllerTest {
 	
 	@Autowired
 	private MockMvc mockMvc;

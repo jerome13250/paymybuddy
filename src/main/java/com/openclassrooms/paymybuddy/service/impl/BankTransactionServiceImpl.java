@@ -16,7 +16,6 @@ import com.openclassrooms.paymybuddy.service.interfaces.LocalDateTimeService;
 import com.openclassrooms.paymybuddy.service.interfaces.PagingService;
 import com.openclassrooms.paymybuddy.service.interfaces.UserService;
 import com.openclassrooms.paymybuddy.utils.paging.Paged;
-import com.openclassrooms.paymybuddy.utils.paging.Paging;
 
 @Service
 public class BankTransactionServiceImpl implements BankTransactionService {
@@ -49,8 +48,13 @@ public class BankTransactionServiceImpl implements BankTransactionService {
 		
 		PageRequest request = PageRequest.of(pageNumber - 1, size, Sort.by(Sort.Direction.DESC, "id"));
         Page<BankTransaction> page = bankTransactionRepository.findBankTransactionByUserId(userService.getCurrentUser().getId(),request);
-        return new Paged<>(page, pagingService.of(page.getTotalPages(), pageNumber));//, size));
+        return new Paged<>(page, pagingService.of(page.getTotalPages(), pageNumber));
 		
+	}
+	
+	@Override
+	public void deleteAll() {
+		bankTransactionRepository.deleteAll();
 	}
 	
 

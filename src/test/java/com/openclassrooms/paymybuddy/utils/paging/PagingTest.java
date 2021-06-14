@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import com.openclassrooms.paymybuddy.controller.BankTransactionController;
 
-public class PagingTest {
+class PagingTest {
 	
 	Logger logger = LoggerFactory.getLogger(PagingTest.class);
 

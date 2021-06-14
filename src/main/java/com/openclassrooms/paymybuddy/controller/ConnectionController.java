@@ -58,7 +58,7 @@ public class ConnectionController {
     public String connectionDelete(@RequestParam Long id) { 
     	logger.info("POST /connectionDelete");
     	User user = userService.getCurrentUser();
-    	user.getConnections().removeIf(connectionUser -> (connectionUser.getId()==id) );
+    	user.getConnections().removeIf(connectionUser -> (connectionUser.getId().equals(id)) );
     	userService.update(user);
         
         return "redirect:/connection";

@@ -5,5 +5,7 @@ import com.openclassrooms.paymybuddy.utils.paging.Paged;
 
 public interface BankTransactionService {
 	void create(BankTransaction bankTransaction);
+	void deleteAll();
 	Paged<BankTransaction> getCurrentUserBankTransactionPage(int pageNumber, int size);
+	
 }

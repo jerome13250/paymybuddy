@@ -3,11 +3,8 @@ package com.openclassrooms.paymybuddy.model;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Currency;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -18,21 +15,15 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
-import com.openclassrooms.paymybuddy.validation.PasswordEquality;
-
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Getter
 @Setter
@@ -61,14 +52,14 @@ public class User {
 	private BigDecimal amount;
 	private Currency currency;
 	
-	@ManyToMany
+	@ManyToMany //FetchType.LAZY by default
 	@JoinTable(
 			name = "user_roles", 
 			joinColumns = @JoinColumn(name = "users_id"), 
 			inverseJoinColumns = @JoinColumn(name = "roles_id"))
 	private Set<Role> roles;
 	
-	@ManyToMany
+	@ManyToMany //FetchType.LAZY by default
 	@JoinTable(
 			name = "user_connections", 
 			joinColumns = @JoinColumn(name = "user_id"), 
