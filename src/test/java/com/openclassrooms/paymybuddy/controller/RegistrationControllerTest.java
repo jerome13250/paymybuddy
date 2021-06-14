@@ -52,13 +52,14 @@ class RegistrationControllerTest {
 				.param("password", "123")
 				.param("passwordconfirm", "123")
 				.param("bankaccountnumber", "1AX123456789")
+				.param("currency", "USD")
 				.with(csrf()))
 		.andExpect(status().is3xxRedirection())
 		.andExpect(redirectedUrl("/"));
 	}
 
 	@Test
-	void PostRegistrationForm_shouldFailcause6FieldsEmpty() throws Exception {
+	void PostRegistrationForm_shouldFailcause6FieldsEmptyAndCurrencytypeMismatch() throws Exception {
 		mockMvc.perform(post("/registration")
 				.param("firstname", "")
 				.param("lastname", "")
@@ -66,9 +67,16 @@ class RegistrationControllerTest {
 				.param("password", "")
 				.param("passwordconfirm", "")
 				.param("bankaccountnumber", "")
+				.param("currency", "")
 				.with(csrf()))
-		.andExpect(model().attributeErrorCount("userForm", 6))
-		.andExpect(model().attributeHasFieldErrorCode("userForm", "firstname", "NotBlank")) 
+		.andExpect(model().attributeErrorCount("userForm", 7))
+		.andExpect(model().attributeHasFieldErrorCode("userForm", "firstname", "NotBlank"))
+		.andExpect(model().attributeHasFieldErrorCode("userForm", "lastname", "NotBlank"))
+		.andExpect(model().attributeHasFieldErrorCode("userForm", "email", "NotBlank"))
+		.andExpect(model().attributeHasFieldErrorCode("userForm", "password", "NotBlank"))
+		.andExpect(model().attributeHasFieldErrorCode("userForm", "passwordconfirm", "NotBlank"))
+		.andExpect(model().attributeHasFieldErrorCode("userForm", "bankaccountnumber", "NotBlank"))
+		.andExpect(model().attributeHasFieldErrorCode("userForm", "currency", "typeMismatch"))
 		.andExpect(status().isOk()); //registration page reloaded		
 	}
 
@@ -81,6 +89,7 @@ class RegistrationControllerTest {
 				.param("password", "123")
 				.param("passwordconfirm", "123456789")
 				.param("bankaccountnumber", "1AX123456789")
+				.param("currency", "USD")
 				.with(csrf()))
 		.andExpect(model().attributeErrorCount("userForm", 1)) //error to display in registration page
 		.andExpect(status().isOk()); //registration page reloaded		

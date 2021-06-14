@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.openclassrooms.paymybuddy.config.CurrenciesAllowed;
 import com.openclassrooms.paymybuddy.model.User;
 import com.openclassrooms.paymybuddy.model.UserTransaction;
 import com.openclassrooms.paymybuddy.model.dto.UserFormDTO;
@@ -34,6 +35,8 @@ public class RegistrationController {
 	//https://www.baeldung.com/entity-to-and-from-dto-for-a-java-spring-application
 	@Autowired
 	private ModelMapper modelMapper;
+	@Autowired
+    private CurrenciesAllowed currenciesAllowed;
 	
     @GetMapping("/registration")
     public String registration(Model model) { 
@@ -56,10 +59,13 @@ public class RegistrationController {
             return "registration";
         }
         
-        User user = convertToEntity(userFormDTO);
+        //UnknownCurrency
+        if ( !currenciesAllowed.getCurrenciesAllowedList().contains(userFormDTO.getCurrency()) ) {
+        	bindingResult.rejectValue("currency", "UnknownCurrency", "This currency is not allowed.");
+        	return "banktransaction";
+        }
         
-        //need to save password for autologin, because userForm password will be encoded by userService
-        //String password = userForm.getPassword(); //TODO : remove
+        User user = convertToEntity(userFormDTO);
         userService.create(user);
        
         securityService.autoLogin(userFormDTO.getEmail(), userFormDTO.getPassword());

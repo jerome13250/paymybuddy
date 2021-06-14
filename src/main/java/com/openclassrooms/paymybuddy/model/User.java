@@ -19,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -46,10 +47,13 @@ public class User {
 	private LocalDateTime inscriptiondatetime;
 	@NotBlank
 	private String password;
+	@NotNull
 	private Boolean enabled;
 	@NotBlank
 	private String bankaccountnumber;
+	@NotNull
 	private BigDecimal amount;
+	@NotNull
 	private Currency currency;
 	
 	@ManyToMany //FetchType.LAZY by default

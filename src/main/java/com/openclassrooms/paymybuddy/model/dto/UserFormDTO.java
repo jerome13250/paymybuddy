@@ -4,6 +4,7 @@ import java.util.Currency;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.openclassrooms.paymybuddy.validation.PasswordEquality;
 
@@ -28,6 +29,7 @@ public class UserFormDTO {
 	private String passwordconfirm;
 	@NotBlank
 	private String bankaccountnumber;
+	@NotNull
 	private Currency currency;
 	
 	
