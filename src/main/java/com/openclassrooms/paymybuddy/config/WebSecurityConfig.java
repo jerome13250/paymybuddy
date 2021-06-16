@@ -12,14 +12,27 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+/**
+ * Spring Security configuration :  
+ * <a href="https://www.marcobehler.com/guides/spring-security#_how_to_configure_spring_security_websecurityconfigureradapter">
+ * how_to_configure_spring_security
+ * </a>
+ * 
+ * @author jerome
+ *
+ */
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     
-	//@Qualifier("userDetailsServiceImpl")
     @Autowired
     private UserDetailsService userDetailsService;
 
+    /**
+     * Spring Security needs to have a PasswordEncoder defined.
+     * @return PasswordEncoder that uses the BCrypt 
+     */
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();

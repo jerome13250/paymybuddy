@@ -5,6 +5,11 @@ import javax.validation.ConstraintValidatorContext;
 
 import com.openclassrooms.paymybuddy.model.dto.UserFormDTO;
 
+/**
+ * Check in user form that password and passwordconfirm are equals.
+ * @author jerome
+ *
+ */
 public class PasswordEqualityValidator implements ConstraintValidator<PasswordEquality, UserFormDTO>{
 
 	@Override

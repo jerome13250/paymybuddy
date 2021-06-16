@@ -8,6 +8,12 @@ import com.openclassrooms.paymybuddy.model.User;
 import com.openclassrooms.paymybuddy.utils.paging.Paged;
 import com.openclassrooms.paymybuddy.utils.paging.Paging;
 
+/**
+ * Service that allows handling the user.
+ * @author jerome
+ *
+ */
+
 public interface UserService {
     /**
      * Create and persist a new User.
@@ -61,24 +67,24 @@ public interface UserService {
     User getCurrentUser();
     
     /**
-     * Sum the amount of a user with a transaction amount.
+     * Calculates and returns the amount of a user after a transaction.
      *
-     * @param user to update.
+     * @param user on which to calculate amount.
      * @param amount of the transaction.
      * @param currency of transaction.
-     * @throws UserAmountException
+     * @throws UserAmountException in case the amount is negative or superior to max allowed (99 999 999.99)
+     * 
+     * @return the calculated amount for user after transaction
      */
-    void sumAmount(User user, BigDecimal amount, Currency currency) throws UserAmountException;
+    BigDecimal sumAmountCalculate(User user, BigDecimal amount, Currency currency) throws UserAmountException;
     
 
     /**
      * Paged information to create the User connection list display in browser.
      * @param pageNumber the page number that is required to display
      * @param size the number of lines per page (number of connections to display on one page)
-     * @return Paged object that contains a Spring Page and a Paging object.
+     * @return Paged object that contains a Spring {@link Paged} and a {@link Paging} object.
      * 
-     * @See {@link Paging}
-     * @See {@link Paged}
      */
     Paged<User> getCurrentUserConnectionPage(int pageNumber, int size);
     

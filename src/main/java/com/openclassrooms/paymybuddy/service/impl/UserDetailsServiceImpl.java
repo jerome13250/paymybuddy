@@ -34,7 +34,7 @@ public class UserDetailsServiceImpl implements UserDetailsService{
     private UserRepository userRepository;
 
     @Override
-    @Transactional(readOnly = true) //TODO : WHY ????
+    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String email) {
         User user = userRepository.findByEmail(email);
         if (user == null) throw new UsernameNotFoundException(email);

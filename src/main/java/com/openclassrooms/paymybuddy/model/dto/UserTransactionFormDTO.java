@@ -1,27 +1,28 @@
 package com.openclassrooms.paymybuddy.model.dto;
 
 import java.math.BigDecimal;
+import java.util.Currency;
 
 import javax.validation.constraints.Max;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
-import com.openclassrooms.paymybuddy.model.User;
-
-import java.util.Currency;
-
 import lombok.Getter;
 import lombok.Setter;
+
+/**
+ * DTO object that contains the informations from form page for a transaction between two users.
+ * @author jerome
+ *
+ */
 
 @Getter
 @Setter
 public class UserTransactionFormDTO {
 	
-	//validation is done in UserTransactionController
-	private User userDestination;
-	//TODO: change to String
-	//private String userDestinationEmail;
+	@NotNull
+	//A cross-record validation is also done in UserTransactionController
+	private Long userDestinationId;
 	
 	@NotNull
 	@Positive
@@ -29,7 +30,7 @@ public class UserTransactionFormDTO {
 	private BigDecimal amount;
 	
 	@NotNull
-	//validation is done in UserTransactionController
+	//A cross-record validation is also done in UserTransactionController
 	private Currency currency;
 	
 }

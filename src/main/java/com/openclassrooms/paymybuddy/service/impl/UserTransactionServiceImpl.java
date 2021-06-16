@@ -20,6 +20,12 @@ import com.openclassrooms.paymybuddy.service.interfaces.UserService;
 import com.openclassrooms.paymybuddy.service.interfaces.UserTransactionService;
 import com.openclassrooms.paymybuddy.utils.paging.Paged;
 
+/**
+ * Implementation of service that allows handling the transactions between users.
+ * @author jerome
+ *
+ */
+
 @Service
 public class UserTransactionServiceImpl implements UserTransactionService {
 

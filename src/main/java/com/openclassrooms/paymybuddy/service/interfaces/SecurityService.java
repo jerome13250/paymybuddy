@@ -1,6 +1,10 @@
 package com.openclassrooms.paymybuddy.service.interfaces;
 
-import org.springframework.security.core.userdetails.User;
+/**
+ * Service that provides current logged-in user and auto login user after registration 
+ * @author jerome
+ *
+ */
 
 public interface SecurityService {
     boolean isAuthenticated();

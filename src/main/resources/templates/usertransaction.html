@@ -22,7 +22,7 @@
 			th:action="@{/usertransaction}">
 			<div class="form-row my-3">
 				<div class="col-12 col-md-6 col-lg-4">
-					<select th:field="*{userDestination}" class="form-control">
+					<select th:field="*{userDestinationId}" class="form-control">
 						<option value="0">--- Please select buddy ---</option>
 						<option
 							th:each="entry : ${user.getConnections()}"
@@ -30,8 +30,8 @@
 							th:text="${entry.getEmail()}">
 						</option>
 					</select> 
-					<span class="has-error" th:if="${#fields.hasErrors('userDestination')}"
-						th:errors="*{userDestination}">
+					<span class="has-error" th:if="${#fields.hasErrors('userDestinationId')}"
+						th:errors="*{userDestinationId}">
 					</span>
 				</div>
 				<div class="col-12 col-md-6 col-lg-8 h5 text-right">

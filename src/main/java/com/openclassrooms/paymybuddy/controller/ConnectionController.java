@@ -12,6 +12,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.openclassrooms.paymybuddy.model.User;
 import com.openclassrooms.paymybuddy.service.interfaces.UserService;
 
+/**
+ * Controller for add/delete connection page.
+ * @author jerome
+ *
+ */
+
 @Controller
 public class ConnectionController {
 
@@ -21,7 +27,7 @@ public class ConnectionController {
     private UserService userService;
 
     @GetMapping("/connection")
-    public String connectionTest(
+    public String connection(
     		@RequestParam(value = "pageNumber", required = false, defaultValue = "1") int pageNumber,
             @RequestParam(value = "size", required = false, defaultValue = "5") int size, 
             Model model) {

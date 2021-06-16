@@ -14,6 +14,12 @@ import com.openclassrooms.paymybuddy.service.interfaces.CalculationService;
 
 import lombok.Setter;
 
+/**
+ * Implementation of service that allows calculations for fees and currencies.
+ * @author jerome
+ *
+ */
+
 @Setter
 @Service
 public class CalculationServiceImpl implements CalculationService {

@@ -11,6 +11,12 @@ import com.openclassrooms.paymybuddy.validation.PasswordEquality;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * DTO object that contains the informations from form page for a user registration.
+ * @author jerome
+ *
+ */
+
 @Getter
 @Setter
 @PasswordEquality

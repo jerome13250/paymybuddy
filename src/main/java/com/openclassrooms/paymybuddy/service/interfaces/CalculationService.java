@@ -4,6 +4,12 @@ import java.math.BigDecimal;
 import java.util.Currency;
 import java.util.Map;
 
+/**
+ * Service that allows calculations for fees and currencies.
+ * @author jerome
+ *
+ */
+
 public interface CalculationService {
 
 	/**

@@ -17,6 +17,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Entity object that represents a transaction between a User and a Bank.
+ * @author jerome
+ *
+ */
+
 @Getter
 @Setter
 @NoArgsConstructor

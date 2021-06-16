@@ -17,6 +17,12 @@ import com.openclassrooms.paymybuddy.service.interfaces.PagingService;
 import com.openclassrooms.paymybuddy.service.interfaces.UserService;
 import com.openclassrooms.paymybuddy.utils.paging.Paged;
 
+/**
+ * Implementation of service that allows handling the bank transactions.
+ * @author jerome
+ *
+ */
+
 @Service
 public class BankTransactionServiceImpl implements BankTransactionService {
 

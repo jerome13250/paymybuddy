@@ -26,6 +26,12 @@ import com.openclassrooms.paymybuddy.service.interfaces.SecurityService;
 import com.openclassrooms.paymybuddy.service.interfaces.UserService;
 import com.openclassrooms.paymybuddy.utils.paging.Paged;
 
+/**
+ * Implementation of service that allows handling the user.
+ * @author jerome
+ *
+ */
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -85,18 +91,17 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public void sumAmount(User user, BigDecimal amount, Currency currency) throws UserAmountException { 
+	public BigDecimal sumAmountCalculate(User user, BigDecimal amount, Currency currency) throws UserAmountException { 
 		
 		BigDecimal resultAmount = calculationService.sumCurrencies(user.getAmount(), user.getCurrency(), amount, currency);
 		if (resultAmount.compareTo(new BigDecimal(0))<0) {
 			throw new UserAmountException("InsufficientFunds", "This amount exceeds your account value.");
 		}
 		if (resultAmount.compareTo(new BigDecimal(9999999))>0) {
-			throw new UserAmountException("UserAmountExceedsMax", "Account can not exceed max value allowed.");
+			throw new UserAmountException("UserAmountExceedsMax", "Destination account can not exceed max value.");
 		}
 		
-		user.setAmount(resultAmount);
-		update(user);
+		return resultAmount;
 		
 	}
 
@@ -109,12 +114,14 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User findById(Long id) {
+		logger.debug("Calling findById({})", id);
 		Optional<User> optuser = userRepository.findById(id);
-		return optuser.isEmpty()? null : optuser.get();
-		
+		if (optuser.isEmpty()) {
+			return null;
+		}
+				
+		return optuser.get();
 		
 	}
-	
-	
-	
+
 }

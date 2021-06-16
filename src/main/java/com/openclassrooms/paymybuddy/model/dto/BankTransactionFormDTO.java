@@ -12,6 +12,12 @@ import java.util.Currency;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * DTO object that contains the informations from form page for a transaction between a user and a bank.
+ * @author jerome
+ *
+ */
+
 @Getter
 @Setter
 public class BankTransactionFormDTO {

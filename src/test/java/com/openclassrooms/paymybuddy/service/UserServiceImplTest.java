@@ -190,11 +190,11 @@ class UserServiceImplTest {
 				new BigDecimal("100"), Currency.getInstance("USD"))).thenReturn(new BigDecimal("200"));
 
 		// Act
-		userServiceImpl.sumAmount(user1, new BigDecimal("100"), Currency.getInstance("USD"));
+		BigDecimal result = userServiceImpl.sumAmountCalculate(user1, new BigDecimal("100"), Currency.getInstance("USD"));
 
 		// Assert
-		assertEquals(user1.getAmount(),new BigDecimal("200"));
-		verify(userRepository, times(1)).save(user1);
+		assertEquals(result,new BigDecimal("200"));
+
 	}
 
 
@@ -206,7 +206,7 @@ class UserServiceImplTest {
 
 		// Act+Assert
 		assertThrows(UserAmountException.class, () -> {
-			userServiceImpl.sumAmount(user1, new BigDecimal("-500"), Currency.getInstance("USD"));
+			userServiceImpl.sumAmountCalculate(user1, new BigDecimal("-500"), Currency.getInstance("USD"));
 		});
 	}
 
@@ -218,7 +218,7 @@ class UserServiceImplTest {
 
 		// Act+Assert
 		assertThrows(UserAmountException.class, () -> {
-			userServiceImpl.sumAmount(user1, new BigDecimal("1000000000000000"), Currency.getInstance("USD"));
+			userServiceImpl.sumAmountCalculate(user1, new BigDecimal("1000000000000000"), Currency.getInstance("USD"));
 		});
 	}
 

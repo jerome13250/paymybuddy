@@ -2,7 +2,11 @@ package com.openclassrooms.paymybuddy;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
+/**
+ * Spring application launcher
+ * @author jerome
+ *
+ */
 @SpringBootApplication
 public class PayMyBuddyApplication {
 

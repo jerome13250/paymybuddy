@@ -16,10 +16,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.openclassrooms.paymybuddy.config.CurrenciesAllowed;
 import com.openclassrooms.paymybuddy.model.User;
-import com.openclassrooms.paymybuddy.model.UserTransaction;
 import com.openclassrooms.paymybuddy.model.dto.UserFormDTO;
 import com.openclassrooms.paymybuddy.service.interfaces.SecurityService;
 import com.openclassrooms.paymybuddy.service.interfaces.UserService;
+
+/**
+ * Controller for user registration
+ * @author jerome
+ *
+ */
 
 @Controller
 public class RegistrationController {

@@ -7,7 +7,10 @@ import org.springframework.stereotype.Service;
 import com.openclassrooms.paymybuddy.service.interfaces.LocalDateTimeService;
 
 /**
- * This class exists only for being able to mock the LocalDateTime.now() in unit testing...
+ * Service for LocalDateTime.now()
+ * This class exists only for being able to mock the LocalDateTime.now() in unit testing : 
+ * <a href="https://www.jerriepelser.com/blog/unit-testing-with-dates/"> unit-testing-with-dates </a>
+ * 
  * @author jerome
  *
  */

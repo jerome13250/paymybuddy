@@ -1,5 +1,7 @@
 package com.openclassrooms.paymybuddy.controller;
 
+import java.math.BigDecimal;
+
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
@@ -22,6 +24,12 @@ import com.openclassrooms.paymybuddy.model.User;
 import com.openclassrooms.paymybuddy.model.dto.BankTransactionFormDTO;
 import com.openclassrooms.paymybuddy.service.interfaces.BankTransactionService;
 import com.openclassrooms.paymybuddy.service.interfaces.UserService;
+
+/**
+ * Controller for BankTransaction
+ * @author jerome
+ *
+ */
 
 @Controller
 public class BankTransactionController {
@@ -72,27 +80,30 @@ public class BankTransactionController {
             return "banktransaction";
         }
     	
-    	//UnknownCurrency
+    	//cross-record validation : Currency not allowed in our list
         if ( !currenciesAllowed.getCurrenciesAllowedList().contains(bankTransactionFormDTO.getCurrency()) ) {
         	bindingResult.rejectValue("currency", "UnknownCurrency", "This currency is not allowed.");
         	return "banktransaction";
         }
     	
         BankTransaction bankTransaction = convertToEntity(bankTransactionFormDTO);
-        
 
-        //update user amount:
+        //cross-record validation : calculate user amount after transaction, UserAmountException thrown if amount is invalid
+        BigDecimal connectedUserAmountAfterTransaction;
         try {
-			userService.sumAmount(connectedUser, bankTransaction.getAmount(), bankTransaction.getCurrency());
+        	connectedUserAmountAfterTransaction = userService.sumAmountCalculate(connectedUser, bankTransaction.getAmount(), bankTransaction.getCurrency());
 		} catch (UserAmountException e) {
 			logger.debug("UserAmountException");
 			bindingResult.rejectValue("amount", e.getErrorCode(), e.getDefaultMessage());
         	return "banktransaction";
 		}
         
+        //update user amount:
+        connectedUser.setAmount(connectedUserAmountAfterTransaction);
+        
         //create banktransaction:
         bankTransactionService.create(bankTransaction);
-        connectedUser.getBanktransactions().add(bankTransaction);
+        
         
         //redirection do not use the current Model, it goes to GET /bantransaction
         return "redirect:/banktransaction";

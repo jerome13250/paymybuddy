@@ -4,6 +4,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Spring configuration that loads a modelMapper bean. It is needed for DTO/Entity conversion.
+ * 
+ * @author jerome
+ *
+ */
 @Configuration
 public class SpringConfig {
     

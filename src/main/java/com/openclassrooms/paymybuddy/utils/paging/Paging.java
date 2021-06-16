@@ -24,12 +24,11 @@ import lombok.Setter;
  * </a>
  * </p>
  * 
- * @param <T>
  */
 
 @Setter
 @Getter
-@Builder
+//@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Paging {
@@ -101,7 +100,15 @@ public class Paging {
                           .pageItemType(PageItemType.DOTS)
                           .build());
     }
-
+    
+    
+    /**
+     * Method to get a Paging Object constructed from total count of pages and currently required page.
+     * 
+     * @param totalPages the total count of pages.
+     * @param pageNumber the currently required page number to display.
+     * @return Paging object to display on view.
+     */
     public static Paging of(int totalPages, int pageNumber){
         Paging paging = new Paging();
         paging.setNextEnabled(pageNumber != totalPages); //Next enabled if not on last page

@@ -12,12 +12,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Entity object that is used by Spring Security for authorizations.
+ * @author jerome
+ *
+ */
+
 @Getter
 @Setter
-//@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode  //used for equals unit test in User
+@EqualsAndHashCode
 @Entity
 @Table(name = "role")
 public class Role {

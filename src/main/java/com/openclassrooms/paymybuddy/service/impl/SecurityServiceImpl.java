@@ -14,6 +14,12 @@ import org.springframework.stereotype.Service;
 
 import com.openclassrooms.paymybuddy.service.interfaces.SecurityService;
 
+/**
+ * Service that provides current logged-in user and auto login user after registration 
+ * @author jerome
+ *
+ */
+
 @Service
 public class SecurityServiceImpl implements SecurityService{
     @Autowired

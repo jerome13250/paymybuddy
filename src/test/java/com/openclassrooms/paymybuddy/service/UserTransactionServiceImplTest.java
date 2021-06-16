@@ -40,7 +40,7 @@ import com.openclassrooms.paymybuddy.utils.paging.Paged;
 import com.openclassrooms.paymybuddy.utils.paging.Paging;
 
 @ExtendWith(MockitoExtension.class)
-public class UserTransactionServiceImplTest {
+class UserTransactionServiceImplTest {
 	
 	@InjectMocks
 	UserTransactionServiceImpl userTransactionServiceImpl;

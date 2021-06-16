@@ -8,6 +8,12 @@ import org.springframework.data.repository.query.Param;
 
 import com.openclassrooms.paymybuddy.model.BankTransaction;
 
+/**
+ * Spring Data JPA Repository for BankTransaction
+ * @author jerome
+ *
+ */
+
 public interface BankTransactionRepository  extends JpaRepository<BankTransaction, Long>{
 	
 	@Query(value = 

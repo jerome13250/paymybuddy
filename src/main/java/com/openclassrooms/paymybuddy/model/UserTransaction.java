@@ -17,7 +17,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
+
+/**
+ * Entity object that represents a transaction between two users.
+ * @author jerome
+ *
+ */
 
 @Getter
 @Setter

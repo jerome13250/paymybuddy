@@ -8,6 +8,13 @@ import org.springframework.data.repository.query.Param;
 
 import com.openclassrooms.paymybuddy.model.UserTransaction;
 
+/**
+ * Spring Data JPA Repository for UserTransaction
+ * @author jerome
+ *
+ */
+
+
 public interface UserTransactionRepository  extends JpaRepository<UserTransaction, Long>{
 	
 

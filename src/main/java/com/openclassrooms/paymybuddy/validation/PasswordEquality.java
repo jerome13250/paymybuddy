@@ -7,6 +7,11 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
+/**
+ * Check in user form that password and passwordconfirm are equals.
+ * @author jerome
+ *
+ */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = PasswordEqualityValidator.class)

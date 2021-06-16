@@ -26,6 +26,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Entity object that represents a User.
+ * @author jerome
+ *
+ */
+
 @Getter
 @Setter
 @AllArgsConstructor

@@ -72,7 +72,7 @@ class UserTransactionControllerTestIT {
 	@WithMockUser(username="test@mail.com") //test@mail.com exists in our test database
 	void postUsertransaction() throws Exception {
 		mvc.perform(post("/usertransaction")
-				.param("userDestination", "54")
+				.param("userDestinationId", "54")
 				.param("amount", "100")
 				.param("currency", "USD")
 				.with(csrf())

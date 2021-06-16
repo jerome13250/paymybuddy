@@ -8,6 +8,12 @@ import org.springframework.data.repository.query.Param;
 
 import com.openclassrooms.paymybuddy.model.User;
 
+/**
+ * Spring Data JPA Repository for User
+ * @author jerome
+ *
+ */
+
 public interface UserRepository extends JpaRepository<User, Long> {
 	
 	public User findByEmail(String email); 
