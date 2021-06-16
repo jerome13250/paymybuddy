@@ -12,6 +12,9 @@ Project goals:
 * Provide SQL scripts to create tables.
 * Create a java web app Java with repository pattern.
 
+![UML-class-diagram](https://raw.githubusercontent.com/jerome13250/paymybuddy/feature_UserTransactionDTO_UserEntityToString/images/PayMyBuddy_ClassDiagram.png)
+
+![database](https://raw.githubusercontent.com/jerome13250/paymybuddy/feature_UserTransactionDTO_UserEntityToString/images/PayMyBuddy_diagram.png)
 
 
 ### Built With
