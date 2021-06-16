@@ -8,7 +8,7 @@ Web application prototype for the startup Pay My Buddy. This is a Spring Boot ap
 
 Project goals:
 * Create database tables.
-* Provide UML class diagram.
+* Provide UML class diagram (see 2 images below)
 * Provide SQL scripts to create tables.
 * Create a java web app Java with repository pattern.
 
@@ -20,7 +20,6 @@ Project goals:
 ### Built With
 
 * [Java 11](https://adoptopenjdk.net/)
-* [Maven 3.8.1](https://maven.apache.org/download.cgi#downloading-apache-maven-3-8-1)
 
 <!-- GETTING STARTED -->
 ## Getting Started
@@ -30,13 +29,33 @@ To get a local copy up and running follow these simple example steps:
 
 ### Prerequisites
 
-
+Check that you have : 
+* Java 11 installed
+  ```sh
+  java -version
+  ```
 
 ### Installation
 
-
-
-<!-- USAGE EXAMPLES -->
-## Usage
+1. Choose a directory
+   ```sh
+   cd /path/to/directory/project
+   ```
+2. Clone the repo
+   ```sh
+   git clone https://github.com/jerome13250/paymybuddy.git
+   ```
+3. Select the paymybuddy directory
+   ```sh
+   cd paymybuddy
+   ```
+4. Package the application (fat jar file) using [maven wrapper](https://github.com/takari/maven-wrapper) that downloads automatically the correct Maven version if it's not found.
+   ```sh
+   mvnw package
+   ```
+5. Execute the jar file
+   ```JS
+   java -jar ./target/paymybuddy-0.0.1-SNAPSHOT.jar
+   ```
 
 
