@@ -6,7 +6,6 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
-import org.modelmapper.PropertyMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,11 +67,7 @@ public class UserTransactionController {
 		return "usertransaction";
 	}
 
-	//By default, rollback happens for runtime and unchecked exceptions only. The checked exception does not trigger
-	//a rollback of the transaction. We can modify this behavior with rollbackFor and noRollbackFor annotation parameters.
-	//https://www.baeldung.com/transaction-configuration-with-jpa-and-spring#the-transactional-annotation
-	//To rollback the exception programmatically we need to specify the Exception with parameter "rollbackFor".
-	//https://stackoverflow.com/questions/25738883/spring-transactional-annotation-when-using-try-catch-block
+	
 	@Transactional
 	@PostMapping("/usertransaction")
 	public String postUsertransactionGetMoney(
@@ -158,7 +153,7 @@ public class UserTransactionController {
 
 		//Auto-mapping for same name attributes
 		UserTransaction userTransaction = modelMapper.map(userTransactionFormDTO, UserTransaction.class);
-		//userDestinationId is mapped automatically to userTransaction.id which is bad, reset to null:
+		//userDestinationId is mapped automatically by modelmapper to userTransaction.id which is bad, reset to null:
 		userTransaction.setId(null);
 		//Mapping from DTO.id to Entity.User:
 		userTransaction.setUserDestination(userDestination);
