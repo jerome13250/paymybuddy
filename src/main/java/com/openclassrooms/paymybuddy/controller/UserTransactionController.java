@@ -106,7 +106,6 @@ public class UserTransactionController {
 		UserTransaction userTransaction = convertToEntity(userTransactionFormDTO, userDestination);
 
 		//cross-record validation : calculate user amount after transaction, UserAmountException thrown if amount is invalid
-
 		BigDecimal sourceUserAmountAfterTransaction;
 		BigDecimal destinationUserAmountAfterTransaction;
 		try {

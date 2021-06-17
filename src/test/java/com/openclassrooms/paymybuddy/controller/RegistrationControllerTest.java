@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import org.junit.jupiter.api.Test;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -32,7 +33,8 @@ class RegistrationControllerTest {
 	private UserService userServiceMock;
 	@MockBean
 	private SecurityService securityServiceMock;
-
+	@MockBean
+	private ModelMapper modelMapperMock;
 	
 	@Test
 	void GetRegistrationForm_shouldSucceed() throws Exception {
@@ -96,7 +98,7 @@ class RegistrationControllerTest {
 	}
 
 	@Test
-	void PostRegistrationForm_shouldFailcausePasswordAlreadyExist() throws Exception {
+	void PostRegistrationForm_shouldFailcauseUserAlreadyExist() throws Exception {
 		//ARRANGE
 		when(userServiceMock.existsByEmail("johndoe@mail.com")).thenReturn(Boolean.TRUE);
 
@@ -108,10 +110,29 @@ class RegistrationControllerTest {
 				.param("password", "123")
 				.param("passwordconfirm", "123")
 				.param("bankaccountnumber", "1AX123456789")
+				.param("currency", "USD")
 				.with(csrf()))
 		.andExpect(model().attributeErrorCount("userForm", 1)) //error to display in registration page
 		.andExpect(status().isOk()); //registration page reloaded		
 	}
 
+	@Test
+	void PostRegistrationForm_shouldFailcauseCurrencyNotAllowed() throws Exception {
+		//ARRANGE
+		when(userServiceMock.existsByEmail("johndoe@mail.com")).thenReturn(Boolean.FALSE);
+
+		//ACT+ASSERT
+		mockMvc.perform(post("/registration")
+				.param("firstname", "john")
+				.param("lastname", "doe")
+				.param("email", "johndoe@mail.com")
+				.param("password", "123")
+				.param("passwordconfirm", "123")
+				.param("bankaccountnumber", "1AX123456789")
+				.param("currency", "CAD") //canadian dollar not allowed
+				.with(csrf()))
+		.andExpect(model().attributeErrorCount("userForm", 1)) //error to display in registration page
+		.andExpect(status().isOk()); //registration page reloaded		
+	}
 
 }

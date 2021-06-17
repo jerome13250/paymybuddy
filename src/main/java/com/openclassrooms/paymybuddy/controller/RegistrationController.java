@@ -67,7 +67,7 @@ public class RegistrationController {
         //UnknownCurrency
         if ( !currenciesAllowed.getCurrenciesAllowedList().contains(userFormDTO.getCurrency()) ) {
         	bindingResult.rejectValue("currency", "UnknownCurrency", "This currency is not allowed.");
-        	return "banktransaction";
+        	return "registration";
         }
         
         User user = convertToEntity(userFormDTO);
