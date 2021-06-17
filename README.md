@@ -9,7 +9,7 @@ Web application prototype for the startup Pay My Buddy. This is a Spring Boot ap
 Project goals:
 * Create database tables.
 * Provide UML class diagram (see 2 images below)
-* Provide [SQL scripts to create tables](https://github.com/jerome13250/paymybuddy/tree/master/resources), please note that a specific test db exists for integration tests.
+* Provide SQL scripts to create tables [click here to access](https://github.com/jerome13250/paymybuddy/tree/master/resources), please note that a specific test db exists for integration tests.
 * Create a java web app Java with repository pattern.
 
 ![UML-class-diagram](https://github.com/jerome13250/paymybuddy/blob/master/images/PayMyBuddy_ClassDiagram.png)
@@ -58,5 +58,7 @@ Check that you have :
    java -jar ./target/paymybuddy-0.0.1-SNAPSHOT.jar
    ```
 6. To access the application, open your browser, go to [http://localhost:8080](http://localhost:8080)
+
+7. Note that the first time, since you start with an empty database, you need to [register](http://localhost:8080/registration) some users to be able to do some operations.
 
 ![homepage](https://github.com/jerome13250/paymybuddy/blob/master/images/PayMyBuddy_homepage.png)
