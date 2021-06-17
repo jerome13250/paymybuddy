@@ -12,9 +12,9 @@ Project goals:
 * Provide [SQL scripts to create tables](https://github.com/jerome13250/paymybuddy/tree/master/resources), please note that a specific test db exists for integration tests.
 * Create a java web app Java with repository pattern.
 
-![UML-class-diagram](https://raw.githubusercontent.com/jerome13250/paymybuddy/feature_UserTransactionDTO_UserEntityToString/images/PayMyBuddy_ClassDiagram.png)
+![UML-class-diagram](https://github.com/jerome13250/paymybuddy/blob/master/images/PayMyBuddy_ClassDiagram.png)
 
-![database](https://raw.githubusercontent.com/jerome13250/paymybuddy/feature_UserTransactionDTO_UserEntityToString/images/PayMyBuddy_diagram.png)
+![database](https://github.com/jerome13250/paymybuddy/blob/master/images/PayMyBuddy_diagram.png)
 
 
 ### Built With
@@ -57,5 +57,6 @@ Check that you have :
    ```JS
    java -jar ./target/paymybuddy-0.0.1-SNAPSHOT.jar
    ```
-6. Open your browser, go to [http://localhost:8080](http://localhost:8080)
+6. To access the application, open your browser, go to [http://localhost:8080](http://localhost:8080)
 
+![homepage](https://github.com/jerome13250/paymybuddy/blob/master/images/PayMyBuddy_homepage.png)
