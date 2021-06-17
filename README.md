@@ -49,7 +49,7 @@ Check that you have :
    ```sh
    cd paymybuddy
    ```
-4. Package the application (fat jar file) using [maven wrapper](https://github.com/takari/maven-wrapper) that downloads automatically the correct Maven version if it's not found.
+4. Package the application (fat jar file) using [maven wrapper](https://github.com/takari/maven-wrapper) provided in the folder, it downloads automatically the correct Maven version if it's not found.
    ```sh
    mvnw package
    ```
@@ -57,5 +57,5 @@ Check that you have :
    ```JS
    java -jar ./target/paymybuddy-0.0.1-SNAPSHOT.jar
    ```
-
+6. Open your browser, go to [http://localhost:8080](http://localhost:8080)
 
