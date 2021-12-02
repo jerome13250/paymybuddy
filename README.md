@@ -6,7 +6,7 @@ Openclassrooms project number 6
 
 Web application prototype for the startup Pay My Buddy. This is a Spring Boot application for project number 6 of [Openclassrooms](https://openclassrooms.com/) java back-end formation.
 
-![homepage](https://github.com/jerome13250/paymybuddy/blob/master/images/PayMyBuddy_homepage.png)
+![homepage](homepage.png)
 
 Project goals:
 * Create database tables.
