@@ -6,15 +6,17 @@ Openclassrooms project number 6
 
 Web application prototype for the startup Pay My Buddy. This is a Spring Boot application for project number 6 of [Openclassrooms](https://openclassrooms.com/) java back-end formation.
 
+![homepage](https://github.com/jerome13250/paymybuddy/blob/master/images/PayMyBuddy_homepage.png)
+
 Project goals:
 * Create database tables.
 * Provide UML class diagram (see 2 images below)
 * Provide SQL scripts to create tables [click here to access](https://github.com/jerome13250/paymybuddy/tree/master/resources), please note that a specific test db exists for integration tests.
 * Create a java web app Java with repository pattern.
 
-![UML-class-diagram](https://github.com/jerome13250/paymybuddy/blob/master/images/PayMyBuddy_ClassDiagram.png)
+![UML-class-diagram](/images/classdiagram.png)
 
-![database](https://github.com/jerome13250/paymybuddy/blob/master/images/PayMyBuddy_diagram.png)
+![database](/images/diagram.png)
 
 
 ### Built With
@@ -61,4 +63,3 @@ Check that you have :
 
 7. Note that the first time, since you start with an empty database, you need to [register](http://localhost:8080/registration) some users to be able to do some operations.
 
-![homepage](https://github.com/jerome13250/paymybuddy/blob/master/images/PayMyBuddy_homepage.png)
